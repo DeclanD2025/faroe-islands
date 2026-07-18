@@ -4,8 +4,8 @@
   "description": "Trip planner for Motherwell v HB in the Faroe Islands — July 2026",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0e0f",
-  "theme_color": "#0a0e0f",
+  "background_color": "#FBF8F1",
+  "theme_color": "#FBF8F1",
   "orientation": "portrait-primary",
   "lang": "en",
   "icons": [

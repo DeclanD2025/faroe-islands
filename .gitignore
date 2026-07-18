@@ -33,9 +33,21 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# one-off helper directories from local asset / data fetches
+/tmp_meta/
+/public/motifs/
+
 # vercel
 .vercel
+
+# helper directories from local asset / data fetches (Photos go under
+# public/images/faroes/ — these are scratch metadata dumps)
+
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# one-off helper directories from local asset / data fetches
+/tmp_meta/
+/public/motifs/

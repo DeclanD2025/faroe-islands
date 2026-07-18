@@ -1,250 +1,84 @@
-import type { Metadata } from "next";
+// /places — a field-guide view of Suðuroy + Vágar. Each place is a hand-
+// stamped X glyph with a small photo + a typed caption, plus a Caveat note
+// pinned to the side. The page reads as a printed guidebook's "places" page.
 
-export const metadata: Metadata = {
-  title: "Hikes & Sights · Faroe Islands",
-  description: "Suðuroy hikes, Tórshavn match-day sights, and pubs near Tórsvøllur.",
-};
+import { PLACES } from "@/lib/data/itinerary";
 
-const categories = [
-  {
-    name: "Suðuroy — Doorstep & By Bus",
-    spots: [
-      {
-        name: "Hvannhagi",
-        village: "Above Tvøroyri · 2–3 hrs, moderate",
-        description:
-          "The island's signature hike. Start on Ovaravegur above Tvøroyri, follow orange posts to a sheep gate, then a mid-slope path to a second gate. The final narrow descent drops to a lake cradled on the edge of the sea, facing Stóra and Lítla Dímun. Free. Bus 700 to Tvøroyri, then walk up.",
-        mustSee: true,
-        emoji: "🥾",
-        access: "Bus 700",
-      },
-      {
-        name: "Ásmundarstakkur & the Bridge",
-        village: "Sandvík, north tip · 30–40 min each way, easy",
-        description:
-          "Park at Sandvík, walk up to a gate, follow gravel track to the 'Ásmundarstakkur' signpost, then strike across boggy grassland on blue/yellow markers to the cliff edge — dramatic sea stack and the famous wooden bridge. Flat but muddy. Skip in fog: markers vanish and the cliff loop is dangerous.",
-        mustSee: true,
-        emoji: "🌉",
-        access: "Bus 701",
-      },
-      {
-        name: "Hov",
-        village: "~2 km south of Øravík · easy, flat",
-        description:
-          "Saga-history village right next door — old church and chieftain Havgrímur's burial mound. A short, gentle wander; perfect first evening straight from the guesthouse. Bus 700 (one stop) or ~30-min walk.",
-        mustSee: false,
-        emoji: "🏛️",
-        access: "Walk / Bus 700",
-      },
-      {
-        name: "Fámjin",
-        village: "West coast",
-        description:
-          "Over the hill to the west side. The church keeps the original 1919 Faroese flag (Merkið); there's a waterfall behind and gentle shoreline walks. Quiet and historic. Bus 701.",
-        mustSee: false,
-        emoji: "🚩",
-        access: "Bus 701",
-      },
-      {
-        name: "Froðba",
-        village: "Just east of Tvøroyri",
-        description:
-          "Basalt columns, red cliffs and a blowhole stretch along the coast — an easy add-on either side of a Hvannhagi day. Bus 700 or short walk from Tvøroyri.",
-        mustSee: false,
-        emoji: "🪨",
-        access: "Bus 700",
-      },
-    ],
-  },
-  {
-    name: "Suðuroy — Car or Taxi",
-    spots: [
-      {
-        name: "Eggjarnar",
-        village: "Above Vágur",
-        description:
-          "Clifftop row of sea stacks with old NATO-era ruins and views toward Beinisvørð. Short walk from parking — but access is a steep, narrow, unmaintained mountain road. Car or taxi only.",
-        mustSee: false,
-        emoji: "🗻",
-        access: "Car/taxi",
-      },
-      {
-        name: "Beinisvørð",
-        village: "Near Lopra/Sumba",
-        description:
-          "One of the Faroes' highest sea cliffs at 469 m — raw and enormous, with roadside viewpoints and ridge walks above it. Car or taxi.",
-        mustSee: false,
-        emoji: "🧗",
-        access: "Car/taxi",
-      },
-      {
-        name: "Akraberg Lighthouse",
-        village: "Southern tip, Sumba",
-        description:
-          "The southernmost point of the Faroe Islands — lighthouse, big horizons, a step-over stile in the fence, and views to the Munkurin sea stack. Bus 700 to Sumba + long walk or car.",
-        mustSee: false,
-        emoji: "🔦",
-        access: "Car/taxi",
-      },
-    ],
-  },
-  {
-    name: "Tórshavn — Match Day Sights",
-    spots: [
-      {
-        name: "Tinganes",
-        village: "Old-town peninsula · free · 5 min from harbour",
-        description:
-          "The turf-roofed timber houses of one of the world's oldest parliamentary sites, jutting into the harbour. Wander the red-painted lanes — peak Faroese postcard. Perfect pre-match wander.",
-        mustSee: true,
-        emoji: "🏛️",
-        access: "Walk",
-      },
-      {
-        name: "Reyn & Vesturkirkjan",
-        village: "Old quarter · free",
-        description:
-          "The lanes above Tinganes, plus the white 'Vesturkirkjan' landmark church with a tall spire — quiet and atmospheric.",
-        mustSee: false,
-        emoji: "⛪",
-        access: "Walk",
-      },
-      {
-        name: "Skansin",
-        village: "Harbour fort · free · 10 min from centre",
-        description:
-          "A 1580 fort guarding the harbour, with old cannons, a lighthouse and WWII relics. Good sea views.",
-        mustSee: false,
-        emoji: "🏰",
-        access: "Walk",
-      },
-      {
-        name: "Listasavn Føroya",
-        village: "National Gallery · by Viðarlund park",
-        description:
-          "Faroese art in a calm modern space beside the wooded park — a solid rain plan before the match.",
-        mustSee: false,
-        emoji: "🎨",
-        access: "Walk",
-      },
-    ],
-  },
-  {
-    name: "Tórshavn — Pubs Near the Ground",
-    spots: [
-      {
-        name: "OY Brewing",
-        village: "Brewpub · ~5 min from ground · Thu 11:30–22:00",
-        description:
-          "Brewed on site, plus food. The closest pour to Tórsvøllur — the natural pre-match base. Get in early before the away crowd fills it.",
-        mustSee: true,
-        emoji: "🍺",
-        access: "Walk",
-      },
-      {
-        name: "Tórshøll",
-        village: "Locals' pub · harbour, ~15 min · Thu 11:00–23:45",
-        description:
-          "Cheap Faroese beer and a proper football crowd. Lively and unpretentious.",
-        mustSee: false,
-        emoji: "🍻",
-        access: "Walk",
-      },
-      {
-        name: "Glitnir",
-        village: "Sports bar · waterfront · Thu to ~23:45",
-        description: "Live football, Gull and Slupp on tap, harbour views.",
-        mustSee: false,
-        emoji: "📺",
-        access: "Walk",
-      },
-      {
-        name: "Irish Pub Tórshavn",
-        village: "Pub-restaurant · harbour · Thu 11:30–23:00",
-        description:
-          "Fish & chips, full bar, busy — the away-day classic.",
-        mustSee: false,
-        emoji: "🍀",
-        access: "Walk",
-      },
-      {
-        name: "Mikkeller Tórshavn",
-        village: "Craft beer · old lanes · Thu 17:00–24:00",
-        description:
-          "Tiny and cosy; opens late afternoon. Fills after the whistle — perfect post-match.",
-        mustSee: false,
-        emoji: "🍺",
-        access: "Walk",
-      },
-      {
-        name: "Sirkus Bar",
-        village: "Bar · central · eve",
-        description:
-          "Eccentric and characterful — a good last stop before the dash to the pier.",
-        mustSee: false,
-        emoji: "🎪",
-        access: "Walk",
-      },
-    ],
-  },
-];
-
-export default function Places() {
+export default function PlacesPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16">
-      <div className="mb-14">
-        <span className="text-sm font-semibold uppercase tracking-[0.2em] text-golden">
-          Suðuroy &amp; Tórshavn
-        </span>
-        <h1 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight text-cream">
-          Hikes &amp; Sights
-        </h1>
-        <p className="mt-4 text-fog leading-relaxed max-w-xl">
-          Hikes ordered by access difficulty from our Øravík base. Plus
-          Tórshavn match-day sights and every pub worth knowing near the ground.
+    <article className="relative mx-auto px-6 sm:px-10 pt-24 pb-24 sm:pt-28 sm:pb-32" style={{ maxWidth: "min(76rem, 100%)" }}>
+      <header className="mb-16 sm:mb-20">
+        <p className="font-serif italic text-[13px] text-bone mb-3">
+          Field guide · the places on the trip
         </p>
-      </div>
+        <h1 className="headline text-[clamp(2.6rem,6vw,4.4rem)] leading-[1.02] tracking-tight max-w-[20ch]">
+          <span className="italic font-normal">Walking</span>, driving, <br />
+          sailing. <br />
+          <span className="italic font-normal">In that order.</span>
+        </h1>
+        <p className="prose-trip mt-6 max-w-[40rem]">
+          A printed field guide: each place is a hand-stamped X on a small
+          photograph, with a typed caption and a Caveat marginal note pinned
+          to the side. Suðuroy is the south island; Sørvágur is the airport
+          village. The ferry is the spine of both.
+        </p>
+      </header>
 
-      <div className="flex flex-col gap-14">
-        {categories.map((cat) => (
-          <div key={cat.name}>
-            <h2 className="text-lg font-semibold text-cream mb-6 pb-3 border-b border-white/[0.06]">
-              {cat.name}
-            </h2>
-            <div className="grid gap-5 sm:grid-cols-2">
-              {cat.spots.map((spot) => (
-                <div
-                  key={spot.name}
-                  className="group rounded-2xl border border-white/[0.06] bg-storm/30 p-6 transition-all hover:border-white/[0.12] hover:bg-storm/50"
-                >
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                      <h3 className="text-base font-semibold text-cream flex items-center gap-2 flex-wrap">
-                        {spot.name}
-                        {spot.mustSee && (
-                          <span className="inline-block rounded-md bg-golden/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-golden">
-                            Must
-                          </span>
-                        )}
-                      </h3>
-                      <p className="text-xs font-medium text-fog/50 mt-1">
-                        {spot.village}
-                      </p>
-                    </div>
-                    <span className="text-2xl shrink-0">{spot.emoji}</span>
-                  </div>
-                  <p className="text-sm text-fog leading-relaxed">
-                    {spot.description}
+      <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+        {PLACES.map((place, i) => (
+          <li key={place.id} className={`relative ${i === 0 ? "md:col-span-2" : ""}`}>
+            {/* Hand-stamped X glyph pinned to the upper-left of each frame. */}
+            <svg
+              className="absolute -top-2 -left-2 z-10"
+              width="34" height="34"
+              viewBox="0 0 34 34"
+              aria-hidden
+              style={{ transform: `rotate(${-10 + ((i * 7) % 18) - 9}deg)` }}
+            >
+              <line x1="6" y1="6" x2="28" y2="28" stroke="#1B1F22" strokeWidth="2.4" />
+              <line x1="6" y1="28" x2="28" y2="6" stroke="#1B1F22" strokeWidth="2.4" />
+              <circle cx="17" cy="17" r="3" fill="#FBF8F1" />
+            </svg>
+
+            <figure className={`relative overflow-hidden ${i === 0 ? "h-[44vh] min-h-[280px]" : "h-[40vh] min-h-[220px]"}`}>
+              <img
+                src={`/images/faroes/${place.photo}.jpg`}
+                alt={place.alt}
+                className="object-cover object-center w-full h-full photo-tone"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-[8rem_1fr] gap-x-6">
+              <p className="font-serif italic text-[13px] text-bone sm:pt-1">
+                Folio {i === 0 ? "I" : i === 1 ? "II" : i === 2 ? "III" : i === 3 ? "IV" : "V"} · {place.island}
+              </p>
+              <div>
+                <h2 className="font-serif italic text-[1.7rem] leading-tight text-ink">
+                  {place.name}
+                </h2>
+                <p className="caption mt-2 max-w-[40rem]">{place.caption}</p>
+                <p className="prose-trip mt-4 text-[15.5px] leading-[1.7] max-w-[40rem]">
+                  {place.detail}
+                </p>
+                {place.handwritten ? (
+                  <p
+                    className="script script--atlantic text-[1.45rem] rotate-[-2deg] mt-5 max-w-[26ch]"
+                    aria-hidden
+                  >
+                    {place.handwritten}
                   </p>
-                  <p className="mt-3 text-xs font-medium text-peak/70 font-mono">
-                    Access: {spot.access}
-                  </p>
-                </div>
-              ))}
+                ) : null}
+              </div>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
-    </div>
+      </ol>
+
+      <p className="prose-trip mt-16 max-w-[40rem] italic text-bone">
+        All photographs are stored locally under <span className="code">/public/images/faroes/</span>. Faroe Islands only — no Iceland, no Scotland, no AI landscapes.
+      </p>
+    </article>
   );
 }

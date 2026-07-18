@@ -1,51 +1,296 @@
 @import "tailwindcss";
 
+/* =========================================================================
+   Faroe Islands trip journal — editorial design foundation.
+   Newsreader serif body · Geist Mono for tabular ferry times · Caveat for
+   handwritten marginalia · Anton for programme-style fixture typography.
+   No dark SaaS shell. No domain-colour tokens. No pill status badges.
+   No Geist Sans as the body default.
+   ========================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* --- Editorial palette ---
+     Paper     #FBF8F1  page surface (warm parchment)
+     Mist      #F4F1EA  atmospheric section background
+     Stone     #B5AC97  thin rules, dividers, captions
+     Bone      #6B6557  muted marginalia, fine rules
+     Ink       #1B1F22  primary body and headline-on-paper
+     Deep      #0E1216  deepest print, near-black
+     Moss      #40512B  field-guide accent, low-saturation green
+     Atlantic  #2D4B5F  ferry/water/sparingly as a calm accent
+     Claret    #6F2042  Motherwell — reserved for match day only
+     Amber     #E8A33D  Motherwell accent — reserved for match day only
+     Timetable #B9663C  ferry warning (warm rust, never red-bad)
+  */
+
+  --paper: #FBF8F1;
+  --mist:  #F4F1EA;
+  --stone: #B5AC97;
+  --bone:  #6B6557;
+  --ink:   #1B1F22;
+  --deep:  #0E1216;
+  --moss:  #40512B;
+  --atlantic: #2D4B5F;
+  --claret: #6F2042;
+  --amber:  #E8A33D;
+  --timetable: #B9663C;
+}
+
 @theme inline {
-  --color-background: #0a0e0f;
-  --color-foreground: #e6edef;
-  --color-fog: #8a9ba0;
-  --color-moss: #4a6741;
-  --color-slate: #2d3a3f;
-  --color-sea: #1a3a4a;
-  --color-cliff: #4a4035;
-  --color-peak: #6b8fa3;
-  --color-golden: #c49a3f;
-  --color-cream: #f5f0e8;
-  --color-storm: #1e2629;
-  --color-rust: #c0492f;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-mist: var(--mist);
+  --color-stone: var(--stone);
+  --color-bone: var(--bone);
+  --color-ink: var(--ink);
+  --color-deep: var(--deep);
+  --color-moss: var(--moss);
+  --color-atlantic: var(--atlantic);
+  --color-claret: var(--claret);
+  --color-amber: var(--amber);
+  --color-timetable: var(--timetable);
+
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-script: var(--font-caveat), "Bradley Hand", "Comic Sans MS", cursive;
+  --font-programme: var(--font-anton), Impact, "Helvetica Neue Condensed", sans-serif;
+  --font-mono:  var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
-* {
-  box-sizing: border-box;
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    background: var(--paper);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern";
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--moss) 22%, transparent);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--atlantic);
+    outline-offset: 3px;
+  }
+
+  /* A faint horizontal hairline rule used between editorial blocks. */
+  .rule {
+    border: 0;
+    border-top: 1px solid var(--stone);
+    margin: 0;
+  }
+  .rule-soft { border-top-color: color-mix(in oklab, var(--stone) 60%, transparent); }
+
+  /* Tabular numerals for ferry times, gate numbers, boarding codes. */
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  /* Caption / marginal text — possibly handwritten if it carries .caption-hand. */
+  .caption {
+    font-family: var(--font-serif);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--bone);
+    letter-spacing: 0.005em;
+  }
+
+  /* Body running text. The serif body is the central typographic commitment. */
+  .prose-trip {
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-  background: #0a0e0f;
-}
+/* ---------------------------------------------------------------------------
+   A faint paper-grain texture, kept extremely subtle so it reads as paper
+   rather than as a noisy pattern.
+   --------------------------------------------------------------------------- */
+@layer utilities {
 
-body {
-  background: #0a0e0f;
-  color: #e6edef;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  /* Attaches a faint SVG noise overlay to anything given the .grain class. */
+  .grain { position: relative; }
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+  }
+  .grain > * { position: relative; z-index: 1; }
 
-::selection {
-  background: rgba(196, 154, 63, 0.3);
-  color: #f5f0e8;
-}
+  /* A faint paper-toned overlay that pulls photographic moments into the
+     parchment palette so mixed-media still feels cohesive. */
+  .photo-tone {
+    filter: sepia(0.18) saturate(0.82) contrast(0.97) brightness(0.99);
+  }
+  .photo-tone-deep {
+    filter: sepia(0.30) saturate(0.72) contrast(1.03) brightness(0.85);
+  }
 
-/* Subtle noise texture overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.015;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  /* Massive editorial headline — Newsreader serif with optical sizing. */
+  .headline {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 32;
+  }
+  .headline--deep { color: var(--deep); }
+
+  /* Drop cap — magazine-style three-line-spanning first letter. */
+  .dropcap {
+    font-family: var(--font-serif);
+  }
+  .dropcap::first-letter {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 4.6em;
+    line-height: 0.85;
+    float: left;
+    margin: 0.05em 0.12em 0 -0.05em;
+    color: var(--ink);
+  }
+
+  /* Eyebrow — small, neutral, sentence-case; the lowercase stops reading as a
+     corporate SaaS label. */
+  .eyebrow {
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    line-height: 1;
+    color: var(--bone);
+    letter-spacing: 0.02em;
+  }
+
+  /* Restrained, monospaced ONLY for flight numbers, gate codes, coords,
+     and the couple of operational tool-tips. Never as a label default. */
+  .code {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum";
+    color: var(--atlantic);
+  }
+
+  /* Programme-style condensed sans — used for MATCH WORDMARKS ONLY.
+     Heavy, condensed, single weight, tight tracking. */
+  .programme {
+    font-family: var(--font-programme);
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+
+  /* Hand-script cursive — for marginalia and "notes in the margin". Always
+     set at a small rotation so it reads as hastily written. */
+  .script {
+    font-family: var(--font-script);
+    font-weight: 600;
+    color: var(--atlantcl);
+    line-height: 1.2;
+  }
+  .script--atlantic {
+    color: var(--atlantic);
+  }
+  .script--ink {
+    color: var(--ink);
+  }
+  .script--claret {
+    color: var(--claret);
+  }
+
+  /* Folio running-edge: thin vertical rule pinned to the right edge of the
+     viewport with .folio-edge — sits behind content, never carries weight. */
+  .folio-edge {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 28px;
+    pointer-events: none;
+    z-index: 5;
+    border-left: 1px solid color-mix(in oklab, var(--stone) 70%, transparent);
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .folio-edge { display: block; }
+  }
+  .folio-edge-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-orientation: mixed;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 11px;
+    color: var(--bone);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    position: absolute;
+    top: 50vh;
+    right: 8px;
+    transform-origin: center;
+  }
+
+  /* A small CSS mask that gives any element a torn-paper edge on the right. */
+  .torn-bottom {
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'><path d='M0,0 H1200 V45 L1188,52 L1174,46 L1160,53 L1144,48 L1128,55 L1112,49 L1096,52 L1080,46 L1064,53 L1048,49 L1032,52 L1016,46 L1000,55 L984,48 L968,52 L952,47 L936,53 L920,49 L904,52 L888,46 L872,55 L856,48 L840,52 L824,46 L808,53 L792,50 L776,49 L760,53 L744,46 L728,55 L712,48 L696,52 L680,46 L664,53 L648,50 L632,49 L616,53 L600,46 L584,55 L568,49 L552,53 L536,46 L520,50 L504,48 L488,52 L472,46 L456,53 L440,49 L424,55 L408,49 L392,52 L376,47 L360,53 L344,49 L328,52 L312,46 L296,55 L280,49 L264,52 L248,46 L232,53 L216,48 L200,55 L184,49 L168,52 L152,46 L136,53 L120,49 L104,52 L88,46 L72,55 L56,49 L40,52 L24,46 L8,53 L0,49 Z' fill='black' /></svg>");
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'><path d='M0,0 H1200 V45 L1188,52 L1174,46 L1160,53 L1144,48 L1128,55 L1112,49 L1096,52 L1080,46 L1064,53 L1048,49 L1032,52 L1016,46 L1000,55 L984,48 L968,52 L952,47 L936,53 L920,49 L904,52 L888,46 L872,55 L856,48 L840,52 L824,46 L808,53 L792,50 L776,49 L760,53 L744,46 L728,55 L712,48 L696,52 L680,46 L664,53 L648,50 L632,49 L616,53 L600,46 L584,55 L568,49 L552,53 L536,46 L520,50 L504,48 L488,52 L472,46 L456,53 L440,49 L424,55 L408,49 L392,52 L376,47 L360,53 L344,49 L328,52 L312,46 L296,55 L280,49 L264,52 L248,46 L232,53 L216,48 L200,55 L184,49 L168,52 L152,46 L136,53 L120,49 L104,52 L88,46 L72,55 L56,49 L40,52 L24,46 L8,53 L0,49 Z' fill='black' /></svg>");
+    -webkit-mask-size: 100% 14px;
+    mask-size: 100% 14px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: bottom;
+    mask-position: bottom;
+  }
+
+  /* A black ink-stamp visual — used for the AWAY END claret stamp on match day. */
+  .stamp {
+    display: inline-block;
+    padding: 0.45em 0.85em;
+    border: 3px double currentColor;
+    font-family: var(--font-programme);
+    letter-spacing: 0.08em;
+    font-size: 0.95rem;
+    color: var(--claret);
+    background: transparent;
+    transform: rotate(-9deg);
+    mix-blend-mode: multiply;
+    opacity: 0.78;
+    border-radius: 0;
+  }
+
+  /* Tally-mark column used by the checklist — drawn as an SVG quartet that
+     scales. */
+  .tally {
+    line-height: 1;
+  }
+
+  /* Hand-drawn annotation box. Treats the contained text as a folded-over
+     note rather than a UI element. */
+  .note-folded {
+    background: color-mix(in oklab, var(--mist) 70%, transparent);
+    border-left: 2px solid var(--claret);
+    padding: 1rem 0 0 1.1rem;
+  }
 }

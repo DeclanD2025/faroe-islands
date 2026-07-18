@@ -1,234 +1,152 @@
 "use client";
 
+// Live weather re-wire — called directly from the browser because the static
+// export dropped the original /api/weather route. Hits Open-Meteo (keyless,
+// CORS-friendly). The widget renders five days at a time for two locations
+// (Edinburgh on the way out, Øravík during the trip).
+
 import { useEffect, useState } from "react";
 
-// Weather codes → emoji
-const symbolEmoji: Record<string, string> = {
-  clearsky_day: "☀️",
-  clearsky_night: "🌙",
-  fair_day: "🌤️",
-  fair_night: "🌤️",
-  partlycloudy_day: "⛅",
-  partlycloudy_night: "⛅",
-  cloudy: "☁️",
-  rainshowers_day: "🌦️",
-  rainshowers_night: "🌦️",
-  rain: "🌧️",
-  lightrain: "🌦️",
-  heavyrain: "⛈️",
-  heavyrainshowers_day: "⛈️",
-  heavyrainshowers_night: "⛈️",
-  sleet: "🌨️",
-  snow: "❄️",
-  snowshowers_day: "🌨️",
-  snowshowers_night: "🌨️",
-  fog: "🌫️",
-  lightsleet: "🌨️",
-};
-
-function weatherEmoji(code: string | null): string {
-  if (!code) return "🌤️";
-  // Normalise night codes to day for emoji
-  const day = code.replace("_night", "_day").replace("polartwilight", "day");
-  return symbolEmoji[day] ?? symbolEmoji[code] ?? "🌤️";
-}
-
 const LOCATIONS = [
-  { name: "Tórshavn", lat: 62.0097, lon: -6.7716 },
-  { name: "Øravík", lat: 61.5333, lon: -6.8 },
+  { name: "Edinburgh", lat: 55.9533, lon: -3.1883, label: "the way out" },
+  { name: "Øravík",    lat: 61.5333, lon: -6.8000, label: "the base"    },
 ];
 
-interface WeatherPoint {
-  time: string;
-  temperature: number | null;
-  wind_speed: number | null;
-  wind_direction: number | null;
-  humidity: number | null;
-  precipitation: number;
-  symbol: string | null;
+interface DayForecast {
+  date: string;
+  weatherCode: number;
+  tempMin: number;
+  tempMax: number;
+  precipMm: number;
+  windMax: number;
 }
 
-interface LocationWeather {
-  name: string;
-  data: WeatherPoint[] | null;
-  error: string | null;
-  loading: boolean;
+const WEATHER_LABELS: Record<number, string> = {
+  0: "Clear", 1: "Mostly clear", 2: "Partly cloudy", 3: "Overcast",
+  45: "Fog", 48: "Rime fog",
+  51: "Light drizzle", 53: "Drizzle", 55: "Heavy drizzle",
+  61: "Light rain", 63: "Rain", 65: "Heavy rain",
+  71: "Light snow", 73: "Snow", 75: "Heavy snow",
+  77: "Snow grains",
+  80: "Light showers", 81: "Showers", 82: "Heavy showers",
+  85: "Snow showers", 86: "Heavy snow showers",
+  95: "Thunderstorm", 96: "Thunder + hail", 99: "Thunder + heavy hail",
+};
+
+function weatherLabel(code: number): string {
+  return WEATHER_LABELS[code] ?? "—";
 }
 
-function formatDay(iso: string): string {
+async function loadForecast(lat: number, lon: number, days: number): Promise<DayForecast[]> {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=auto&forecast_days=${days}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Open-Meteo returned ${res.status}`);
+  const data = await res.json();
+  const dates: string[] = data.daily.time;
+  const codes: number[] = data.daily.weather_code;
+  const tmax: number[] = data.daily.temperature_2m_max;
+  const tmin: number[] = data.daily.temperature_2m_min;
+  const precip: number[] = data.daily.precipitation_sum;
+  const wind: number[] = data.daily.wind_speed_10m_max;
+  return dates.map((d, i) => ({
+    date: d,
+    weatherCode: codes[i] ?? 0,
+    tempMin: tmin[i] ?? 0,
+    tempMax: tmax[i] ?? 0,
+    precipMm: precip[i] ?? 0,
+    windMax: wind[i] ?? 0,
+  }));
+}
+
+function formatDate(iso: string): string {
   const d = new Date(iso);
-  const now = new Date();
-  const isToday =
-    d.getDate() === now.getDate() &&
-    d.getMonth() === now.getMonth() &&
-    d.getFullYear() === now.getFullYear();
-  if (isToday) return "Today";
-  const tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
-  const isTomorrow =
-    d.getDate() === tomorrow.getDate() &&
-    d.getMonth() === tomorrow.getMonth() &&
-    d.getFullYear() === tomorrow.getFullYear();
-  if (isTomorrow) return "Tomorrow";
-  return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+  const m = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()] ?? "—";
+  return `${m} ${d.getDate()}\n${d.toLocaleDateString("en-GB", { month: "short" })}`;
 }
 
-function windDirection(deg: number | null): string {
-  if (deg === null) return "—";
-  const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-  return dirs[Math.round(deg / 45) % 8];
-}
+type WeatherState =
+  | { kind: "loading" }
+  | { kind: "ok"; rows: Array<{ name: string; label: string; days: DayForecast[] }> }
+  | { kind: "error"; message: string };
 
 export default function WeatherWidget() {
-  const [locations, setLocations] = useState<LocationWeather[]>(
-    LOCATIONS.map((l) => ({ name: l.name, data: null, error: null, loading: true }))
-  );
+  const [state, setState] = useState<WeatherState>({ kind: "loading" });
 
   useEffect(() => {
-    LOCATIONS.forEach((loc, i) => {
-      fetch(`/api/weather?lat=${loc.lat}&lon=${loc.lon}`)
-        .then((res) => res.json())
-        .then((json) => {
-          if (json.error) throw new Error(json.error);
-          setLocations((prev) =>
-            prev.map((l, j) =>
-              j === i ? { ...l, data: json.timeseries, loading: false } : l
-            )
-          );
-        })
-        .catch((err) => {
-          setLocations((prev) =>
-            prev.map((l, j) =>
-              j === i ? { ...l, error: err.message, loading: false } : l
-            )
-          );
-        });
-    });
+    // The initial state is already "loading" — set it inside the effect would
+    // be a synchronous, redundant re-render. We go straight from "loading"
+    // to either "ok" or "error" below.
+    let alive = true;
+    Promise.all(
+      LOCATIONS.map(async (l) => {
+        return { name: l.name, label: l.label, days: await loadForecast(l.lat, l.lon, 5) };
+      }),
+    )
+      .then((rows) => { if (alive) setState({ kind: "ok", rows }); })
+      .catch((err) => { if (alive) setState({ kind: "error", message: err.message }); });
+    return () => { alive = false; };
   }, []);
 
-  // Group timeseries into days
-  const groupByDay = (points: WeatherPoint[]) => {
-    const days: { label: string; points: WeatherPoint[] }[] = [];
-    let current: { label: string; points: WeatherPoint[] } | null = null;
-    for (const p of points) {
-      const label = formatDay(p.time);
-      if (!current || current.label !== label) {
-        current = { label, points: [] };
-        days.push(current);
-      }
-      current.points.push(p);
-    }
-    return days;
-  };
-
   return (
-    <section className="mx-auto max-w-5xl px-6 py-16 border-t border-white/[0.06]">
-      <div className="flex items-center justify-between mb-8">
+    <section className="mx-auto max-w-[68rem] px-6 sm:px-8 py-20 sm:py-28">
+      <header className="grid grid-cols-1 md:grid-cols-[12rem_1fr] gap-x-12 mb-10">
+        <p className="caption md:pt-2">A weather insert · live</p>
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-fog/60">
-            Live Weather
+          <h2 className="headline text-[clamp(2rem,4.4vw,2.6rem)] leading-[1.05] tracking-tight max-w-[26ch]">
+            <span className="italic font-normal">Five</span> days, two&nbsp;spots.
           </h2>
-          <p className="text-xs text-fog/40 mt-1">
-            via yr.no · updated hourly
+          <p className="prose-trip mt-6 max-w-[34rem]">
+            Live forecast pulled from Open-Meteo. Edinburgh on the way out, Øravík during the trip. Faroese weather is small in detail and wide in range; this is the rough weather window, not a tactical plan.
           </p>
         </div>
-      </div>
+      </header>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        {locations.map((loc) => (
-          <div
-            key={loc.name}
-            className="rounded-2xl border border-white/[0.06] bg-storm/30 p-6"
-          >
-            <h3 className="text-lg font-semibold text-cream mb-4">
-              📍 {loc.name}
-            </h3>
+      <hr className="rule mb-10" />
 
-            {loc.loading && (
-              <div className="flex items-center gap-3 text-sm text-fog/50">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-fog/20 border-t-fog/60" />
-                Loading forecast…
-              </div>
-            )}
+      {state.kind === "loading" ? (
+        <p className="caption max-w-[34rem]">Fetching…</p>
+      ) : null}
 
-            {loc.error && (
-              <div className="rounded-xl border border-rust/20 bg-rust/[0.04] p-4 text-sm text-fog">
-                <span className="font-semibold text-cream">⚠️</span> Could not
-                load weather: {loc.error}
-              </div>
-            )}
+      {state.kind === "error" ? (
+        <p className="caption max-w-[34rem] text-timetable">
+          Unable to load forecast right now. {state.message}
+        </p>
+      ) : null}
 
-            {loc.data && loc.data.length > 0 && (
-              <div>
-                {/* Current */}
-                {(() => {
-                  const now = loc.data[0];
-                  return (
-                    <div className="flex items-center gap-4 mb-6 p-4 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                      <span className="text-4xl">
-                        {weatherEmoji(now.symbol)}
-                      </span>
-                      <div>
-                        <span className="text-3xl font-bold text-cream">
-                          {now.temperature !== null
-                            ? `${Math.round(now.temperature)}°C`
-                            : "—"}
-                        </span>
-                        <p className="text-xs text-fog/60 mt-0.5">
-                          Wind:{" "}
-                          {now.wind_speed !== null
-                            ? `${Math.round(now.wind_speed)} m/s ${windDirection(now.wind_direction)}`
-                            : "—"}
-                          {now.humidity !== null &&
-                            ` · Humidity: ${Math.round(now.humidity)}%`}
-                        </p>
-                        {now.precipitation > 0 && (
-                          <p className="text-xs text-sea/70 mt-0.5">
-                            Rain: {now.precipitation} mm next hour
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })()}
-
-                {/* Day-by-day forecast */}
-                <div className="space-y-3">
-                  {groupByDay(loc.data.slice(1)).map((day) => {
-                    const temps = day.points
-                      .map((p) => p.temperature)
-                      .filter((t): t is number => t !== null);
-                    const sym = day.points[Math.floor(day.points.length / 2)]?.symbol;
-                    const maxPrecip = Math.max(
-                      ...day.points.map((p) => p.precipitation ?? 0)
-                    );
-
-                    return (
-                      <div
-                        key={day.label}
-                        className="flex items-center justify-between gap-2 text-sm"
-                      >
-                        <span className="text-fog/60 w-20 shrink-0">
-                          {day.label}
-                        </span>
-                        <span className="text-xl">{weatherEmoji(sym)}</span>
-                        <span className="text-cream font-medium w-16 text-right">
-                          {temps.length > 0
-                            ? `${Math.round(Math.min(...temps))}–${Math.round(Math.max(...temps))}°`
-                            : "—"}
-                        </span>
-                        <span className="text-xs text-fog/40 w-16 text-right">
-                          {maxPrecip > 0 ? `${maxPrecip}mm` : "dry"}
-                        </span>
-                      </div>
-                    );
-                  })}
+      {state.kind === "ok" ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
+          {state.rows.map((row) => (
+            <div key={row.name}>
+              <header className="mb-4 flex items-baseline justify-between">
+                <div>
+                  <p className="font-serif italic text-[1.6rem] text-ink leading-snug">{row.name}</p>
+                  <p className="caption mt-1">{row.label}</p>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+                <p className="caption">via Open-Meteo</p>
+              </header>
+              <ol className="border-t border-b border-stone divide-y divide-stone">
+                {row.days.map((d, i) => (
+                  <li key={d.date + i} className="grid grid-cols-[5rem_2.5rem_1fr_1fr] gap-x-2 py-3 items-baseline">
+                    <span className="caption tnum">{
+                      d.date === "2026-07-28" ? "Depart"
+                      : d.date === "2026-07-30" ? "Match"
+                      : d.date === "2026-08-01" ? "Return"
+                      : formatDate(d.date).replace("\n", " ")
+                    }</span>
+                    <span className="caption text-bone">{weatherLabel(d.weatherCode)}</span>
+                    <span className="font-serif italic text-[1.025rem] tnum text-ink">
+                      {Math.round(d.tempMin)}–{Math.round(d.tempMax)}°C
+                    </span>
+                    <span className="caption tnum text-bone">
+                      {Math.round(d.windMax)} m/s · {d.precipMm.toFixed(1)}mm
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -1,82 +1,91 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
+import type { Metadata, Viewport } from "next";
+import { Anton, Caveat, Geist_Mono, Newsreader } from "next/font/google";
+import { TopNav } from "@/components/top-nav";
+import { FolioEdge } from "@/components/folio-edge";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
+
+const NAV_ITEMS = [
+  { href: "/",          label: "Journey" },
+  { href: "/itinerary", label: "Days" },
+  { href: "/places",    label: "Map" },
+  { href: "/match-day", label: "Match" },
+  { href: "/packing",   label: "Prepare" },
+];
 
 export const metadata: Metadata = {
   title: "Faroe Islands · July 2026",
-  description: "Motherwell v HB trip planner — Suðuroy & the Tórshavn tie, July 2026",
+  description:
+    "Motherwell v HB — a private field guide to the Suðuroy base, the Tórsvøllur tie, and the ferry mission in between.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Faroe Trip",
-  },
-  other: {
-    "mobile-web-app-capable": "yes",
-    "theme-color": "#0a0e0f",
   },
 };
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/itinerary", label: "Itinerary" },
-  { href: "/places", label: "Hikes & Sights" },
-  { href: "/match-day", label: "Match Day" },
-  { href: "/packing", label: "Packing" },
-  { href: "/info", label: "Travel Info" },
-];
+export const viewport: Viewport = {
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#FBF8F1" }],
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${newsreader.variable} ${caveat.variable} ${anton.variable} ${geistMono.variable} h-full`}
     >
       <head>
         <link rel="apple-touch-icon" href="/faroe-icon.svg" />
-        <meta name="theme-color" content="#0a0e0f" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="min-h-full flex flex-col">
-        <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-storm/80 backdrop-blur-xl">
-          <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-            <Link
-              href="/"
-              className="text-lg font-semibold tracking-tight text-cream hover:text-golden transition-colors"
-            >
-              🇫🇴 Faroe Islands
-            </Link>
-            <div className="flex items-center gap-1 overflow-x-auto">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-fog transition-colors hover:bg-white/[0.04] hover:text-cream whitespace-nowrap"
-                >
-                  {link.label}
-                </Link>
-              ))}
+      <body className="min-h-full text-ink bg-paper antialiased">
+        <FolioEdge />
+        <TopNav items={NAV_ITEMS} />
+        <main id="journey" className="pb-24">{children}</main>
+        <footer className="border-t border-stone mt-32 py-10">
+          <div className="mx-auto max-w-[68rem] px-6 sm:px-8 text-[12.5px] text-bone">
+            <div className="flex flex-wrap items-baseline justify-between gap-y-2">
+              <p className="font-serif italic">
+                Faroe Islands · {new Date("2026-07-28").toLocaleDateString("en-GB", { day: "numeric", month: "long" })} to {new Date("2026-08-01").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} · Declan + guest · Motherwell v HB
+              </p>
+              <p className="font-serif italic">
+                A private field guide — not a Trip OS dashboard.
+              </p>
             </div>
-          </nav>
-        </header>
-        <main className="flex-1">{children}</main>
-        <footer className="border-t border-white/[0.06] py-8 text-center text-sm text-fog/60">
-          <p>Faroe Islands · 28 Jul – 1 Aug 2026 · Declan &amp; Friend · Motherwell v HB</p>
+          </div>
         </footer>
         <script
           dangerouslySetInnerHTML={{

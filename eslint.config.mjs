@@ -13,6 +13,15 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // The trip journal uses direct <img> elements throughout so we can control
+  // object-cover / object-position / sepia filters per composition. Next's
+  // <Image> optimisation layer would replace these with the renderer we want
+  // to keep, so the warning is intentionally turned off project-wide.
+  {
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
