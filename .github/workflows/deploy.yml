@@ -1,0 +1,26 @@
+name: Deploy
+
+# ── Quick start ──
+# Netlify:  push to GitHub, connect repo at netlify.com — nothing else needed.
+#           The netlify.toml handles build config. Zero GitHub Action required.
+#
+# Fly.io:   uncomment the deploy-fly job below, then:
+#           1. flyctl apps create faroe-islands
+#           2. flyctl secrets set --app faroe-islands FLY_API_TOKEN=$(flyctl auth token)
+#           3. Add FLY_API_TOKEN to GitHub repo secrets
+# ──────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main]
+
+# ── Fly.io deploy (uncomment to enable) ──
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: superfly/flyctl-actions/setup-flyctl@master
+#       - run: flyctl deploy --remote-only
+#         env:
+#           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
