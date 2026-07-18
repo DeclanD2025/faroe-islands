@@ -1,28 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Caveat, Geist_Mono, Newsreader } from "next/font/google";
-import { TopNav } from "@/components/top-nav";
-import { FolioEdge } from "@/components/folio-edge";
+import { Geist_Mono, Inter } from "next/font/google";
+import { RailNav } from "@/components/rail-nav";
 import "./globals.css";
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  display: "swap",
-});
-
-const anton = Anton({
-  variable: "--font-anton",
-  subsets: ["latin"],
-  weight: ["400"],
   display: "swap",
 });
 
@@ -33,27 +17,21 @@ const geistMono = Geist_Mono({
 });
 
 const NAV_ITEMS = [
-  { href: "/",          label: "Journey" },
-  { href: "/itinerary", label: "Days" },
+  { href: "/",          label: "Home" },
+  { href: "/itinerary", label: "Trip" },
   { href: "/places",    label: "Map" },
   { href: "/match-day", label: "Match" },
   { href: "/packing",   label: "Prepare" },
 ];
 
 export const metadata: Metadata = {
-  title: "Faroe Islands · July 2026",
+  title: "Faroe Islands · 27 Jul – 1 Aug 2026",
   description:
-    "Motherwell v HB — a private field guide to the Suðuroy base, the Tórsvøllur tie, and the ferry mission in between.",
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Faroe Trip",
-  },
+    "Motherwell v HB · private expedition log for the Suðuroy base, the Tórsvøllur tie, and the ferries in between.",
 };
 
 export const viewport: Viewport = {
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#FBF8F1" }],
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F2EFE7" }],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -65,37 +43,31 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${caveat.variable} ${anton.variable} ${geistMono.variable} h-full`}
+      className={`${inter.variable} ${geistMono.variable} h-full`}
     >
-      <head>
-        <link rel="apple-touch-icon" href="/faroe-icon.svg" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      </head>
-      <body className="min-h-full text-ink bg-paper antialiased">
-        <FolioEdge />
-        <TopNav items={NAV_ITEMS} />
-        <main id="journey" className="pb-24">{children}</main>
-        <footer className="border-t border-stone mt-32 py-10">
-          <div className="mx-auto max-w-[68rem] px-6 sm:px-8 text-[12.5px] text-bone">
-            <div className="flex flex-wrap items-baseline justify-between gap-y-2">
-              <p className="font-serif italic">
-                Faroe Islands · {new Date("2026-07-28").toLocaleDateString("en-GB", { day: "numeric", month: "long" })} to {new Date("2026-08-01").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} · Declan + guest · Motherwell v HB
+      <body className="min-h-full text-basalt bg-wool antialiased">
+        <RailNav items={NAV_ITEMS} />
+        <main id="expedition" className="pb-24 pl-0 sm:pl-28 lg:pl-36">
+          {children}
+        </main>
+        <footer className="border-t border-basalt/15 mt-24 py-10 pl-0 sm:pl-28 lg:pl-36">
+          <div className="mx-auto max-w-[64rem] px-6 sm:px-8 caption">
+            <div className="flex flex-wrap items-baseline justify-between gap-y-3">
+              <p>
+                Faroe Islands ·{" "}
+                <span className="tnum">
+                  {new Date("2026-07-27").toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                </span>
+                {" — "}
+                <span className="tnum">
+                  {new Date("2026-08-01").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                </span>{" "}
+                · Declan + guest · HB Tórshavn v Motherwell
               </p>
-              <p className="font-serif italic">
-                A private field guide — not a Trip OS dashboard.
-              </p>
+              <p>A private expedition log — not a trip dashboard.</p>
             </div>
           </div>
         </footer>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').catch(() => {});
-              }
-            `,
-          }}
-        />
       </body>
     </html>
   );

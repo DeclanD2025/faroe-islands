@@ -1,156 +1,125 @@
-// /match-day — the match programme as a full page. Anton wordmark hero,
-// ferry schedule section, hand-drawn timeline under it. Claret programme
-// throughout (this is the only place claret is loud).
+// /match-day — programme-style page. Scoreboard-style fixture strip +
+// ferry schedule (northbound + southbound rows, not cards) + a vertical
+// timeline with mono times + supporter notes strip + an operational
+// caveat. Print-programme visual language, no editorial flourishes.
 
 import { FERRY, MATCH_FIXTURE, PUBS_NEAR_GROUND } from "@/lib/data/itinerary";
-import { TripCountdown } from "@/components/trip-countdown";
+
+function StatusPill({ tone, label }: { tone: "warn" | "info"; label: string }) {
+  const cls = tone === "warn" ? "border-rust text-rust" : "border-basalt/30 text-basalt/80";
+  return (
+    <span className={`inline-block border ${cls} px-1.5 py-0.5 text-[10.5px] tracking-[0.14em] uppercase`}>
+      {label}
+    </span>
+  );
+}
 
 export default function MatchDayPage() {
   return (
-    <article
-      className="relative isolate overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, #6F2042 0%, #5A1B38 100%)",
-      }}
-    >
-      <div
-        className="absolute inset-x-0 bottom-0 h-40 opacity-30"
-        aria-hidden
-        style={{
-          background:
-            "radial-gradient(80% 100% at 50% 100%, rgba(232,163,61,0.45), transparent 70%)",
-        }}
-      />
+    <article className="px-6 sm:px-8 lg:px-12 pt-10 pb-16 max-w-[64rem]">
+      <header className="pb-10 border-b border-basalt/15">
+        <p className="label">Match · Thu 30 Jul 2026</p>
 
-      <header className="relative mx-auto px-6 sm:px-12 pt-24 pb-16 sm:pt-28 sm:pb-20 text-paper">
-        <p className="programme text-paper/70 text-[12.5px] tracking-[0.35em] uppercase mb-4">
-          Match programme · Thursday 30 July 2026
-        </p>
-        <h1 className="programme text-paper text-[clamp(3.6rem,9vw,7.6rem)] leading-[0.82] tracking-tight">
-          <span className="block">MOTHERWELL</span>
-          <span className="block my-2 sm:my-3 text-[clamp(0.78rem,1.4vw,1.2rem)] tracking-[0.5em] pl-1" style={{ color: "rgba(245,240,232,0.7)" }}>v</span>
-          <span className="block">HB&nbsp;TÓRSHAVN</span>
-        </h1>
-
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6 max-w-[64rem]">
-          <p className="font-serif text-paper text-[1.05rem] leading-snug">
-            {MATCH_FIXTURE.competition}
-          </p>
-          <p className="caption text-paper/80 max-w-[24rem]">
-            {MATCH_FIXTURE.venue} · capacity {MATCH_FIXTURE.capacity}.
-          </p>
-        </div>
-
-        <div className="mt-8">
-          <span className="stamp text-paper" style={{ color: "#FBF8F1", borderColor: "#FBF8F1" }}>AWAY&nbsp;END</span>
-        </div>
-
-        <div className="mt-12 flex flex-wrap items-baseline gap-x-10 gap-y-4 max-w-[64rem]">
-          <div>
-            <p className="caption text-paper/65 mb-2">Kick-off in</p>
-            <TripCountdown target="2026-07-30T17:00:00Z" />
+        {/* Scoreboard-style header strip */}
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-x-6 gap-y-2 max-w-[60rem]">
+          <div className="text-right md:text-right">
+            <p className="font-medium text-basalt text-[clamp(1.6rem,4vw,2.4rem)] leading-tight">{MATCH_FIXTURE.home}</p>
+            <p className="caption mt-1">Tórshavn</p>
           </div>
-          <p
-            className="font-serif italic text-paper/80 text-[15.5px] max-w-[28rem]"
-          >
-            Stadium to ferry terminal is one kilometre, fifteen to twenty minutes
-            on foot. The last sailing is at 21:15 — that&apos;s the deadline.
-          </p>
+          <div className="text-basalt">
+            <p className="font-mono text-[clamp(1.4rem,2.6vw,2rem)] tnum leading-tight">18:00</p>
+            <p className="caption mt-1">kick-off · local</p>
+          </div>
+          <div className="text-left md:text-left">
+            <p className="font-medium text-basalt text-[clamp(1.6rem,4vw,2.4rem)] leading-tight">{MATCH_FIXTURE.away}</p>
+            <p className="caption mt-1">Motherwell · away support</p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1">
+          <Field label="Competition"   value={MATCH_FIXTURE.competition} />
+          <Field label="Venue"         value={MATCH_FIXTURE.venue} />
+          <Field label="Capacity"      value={`${MATCH_FIXTURE.capacity}`} />
+          <Field label="Kick-off"      value={MATCH_FIXTURE.kickoffLocal} />
         </div>
       </header>
 
-      <div className="relative mx-auto px-6 sm:px-12 pb-24 sm:pb-32 text-paper">
-        <section className="border-t pt-10" style={{ borderColor: "rgba(232,163,61,0.4)" }}>
-          <p className="programme text-paper/65 text-[10.5px] tracking-[0.35em] uppercase mb-4">
-            Ferry schedule · match day
+      {/* Ferry schedule — northbound + southbound. */}
+      <section className="mt-12">
+        <header className="border-b border-basalt/15 pb-2 mb-4">
+          <h2 className="label">Ferry schedule · match day</h2>
+          <p className="caption mt-1 max-w-[36rem]">
+            Strandfaraskip Landsins · Route 7 · foot-passenger pre-booked.
           </p>
-          <h2 className="font-serif italic text-[2rem] leading-tight max-w-[24rem] mb-8">
-            The ferries that decide whether the day works.
-          </h2>
+        </header>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+          <FerryColumn
+            title="NORTHBOUND · THU"
+            rows={FERRY.matchNorthbound.map((r: { dep: string; arr: string; note?: string; highlight?: boolean }) => ({
+              dep: r.dep,
+              arr: r.arr.replace(/^Krambatangi\s/, "→ Tórshavn "),
+              note: r.note ?? "",
+              highlight: r.highlight ?? false,
+            }))}
+          />
+          <FerryColumn
+            title="SOUTHBOUND · THU"
+            rows={FERRY.matchSouthbound.map((r: { dep: string; arr: string; note?: string; highlight?: boolean }) => ({
+              dep: r.dep,
+              arr: r.arr.replace(/^Krambatangi\s/, "→ Suðuroy "),
+              note: r.note ?? "",
+              highlight: r.highlight ?? false,
+            }))}
+          />
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-            <FerryColumn
-              title="Northbound · Thu"
-              rows={FERRY.matchNorthbound.map((r: { dep: string; arr: string; note?: string; highlight?: boolean }) => ({
-                dep: r.dep,
-                arr: r.arr.replace(/^Krambatangi\s/, "→ Tórshavn "),
-                note: r.note ?? "",
-                highlight: r.highlight ?? false,
-              }))}
-            />
-            <FerryColumn
-              title="Southbound · Thu"
-              rows={FERRY.matchSouthbound.map((r: { dep: string; arr: string; note?: string; highlight?: boolean }) => ({
-                dep: r.dep,
-                arr: r.arr.replace(/^Krambatangi\s/, "→ Suðuroy "),
-                note: r.note ?? "",
-                highlight: r.highlight ?? false,
-              }))}
-            />
-          </div>
-        </section>
+      {/* Vertical timeline. */}
+      <section className="mt-14 max-w-[40rem]">
+        <header className="border-b border-basalt/15 pb-2 mb-5">
+          <h2 className="label">Travel timeline · Øravík → Tórsvøllur</h2>
+          <p className="caption mt-1">Read top to bottom · ferry and foot</p>
+        </header>
+        <ol className="relative border-l border-basalt/20 pl-6">
+          <TimelineNode time="11:30" title="Ferry north · Krambatangi → Tórshavn" />
+          <TimelineNode time="13:35" title="Tinganes & the harbour" sub="OY Brewing, 5 min from the ground." />
+          <TimelineNode time="18:00" title="Kick-off · Tórsvøllur" sub="UEFA Conference League qualifying · match" />
+          <TimelineNode time="~19:50" title="Full time · walk for the pier" />
+          <TimelineNode time="20:15" title="Foot-passenger queue" sub="An hour is plenty" />
+          <TimelineNode time="21:15" title="Last ferry south · Smyril" sub="Miss it and we sleep in Tórshavn" critical />
+          <TimelineNode time="~23:20" title="Krambatangi · hop to Øravík" />
+        </ol>
+      </section>
 
-        <section className="mt-20 border-t pt-10" style={{ borderColor: "rgba(232,163,61,0.4)" }}>
-          <p className="programme text-paper/65 text-[10.5px] tracking-[0.35em] uppercase mb-4">
-            Timeline · read top to bottom
-          </p>
-          <h2 className="font-serif italic text-[2rem] leading-tight max-w-[24rem] mb-8">
-            Øravík to Tórsvøllur, back by the last boat.
-          </h2>
+      {/* Supporter notes strip. */}
+      <section className="mt-14 max-w-[40rem]">
+        <header className="border-b border-basalt/15 pb-2 mb-4">
+          <h2 className="label">Supporter notes · three pubs near the ground</h2>
+        </header>
+        <ul>
+          {PUBS_NEAR_GROUND.map((p) => (
+            <li key={p.name} className="grid grid-cols-[8rem_1fr] gap-x-4 py-2 border-b border-basalt/10 items-baseline">
+              <span className="font-medium text-basalt text-[14.5px]">{p.name}</span>
+              <span className="caption">{p.walk} · {p.note}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          <div className="grid grid-cols-[2.5rem_1fr] gap-x-4">
-            <div className="relative">
-              <svg viewBox="0 0 32 560" className="w-8 h-[560px]" aria-hidden preserveAspectRatio="none">
-                <path
-                  d="M16 4 q-4 32 4 60 q8 28 -2 60 q-10 32 6 60 q8 28 -4 60 q-12 32 4 60 q8 28 -2 60 q-10 32 4 60 q-4 28 -2 60 q4 28 0 56"
-                  fill="none"
-                  stroke="rgba(232,163,61,0.55)"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <ol className="space-y-7 pb-2">
-              <TimelineNode time="11:30" title="Ferry north · Krambatangi → Tórshavn" />
-              <TimelineNode time="13:35" title="Tinganes & the harbour" sub="OY Brewing, 5 min from the ground." />
-              <TimelineNode time="18:00" title="Kick-off · Tórsvøllur" highlight />
-              <TimelineNode time="~19:50" title="Full time · walk for the pier" />
-              <TimelineNode time="20:15" title="Foot-passenger queue" sub="An hour is plenty." />
-              <TimelineNode time="21:15" title="Last ferry south" critical />
-              <TimelineNode time="~23:20" title="Krambatangi · brief hop to Øravík" />
-            </ol>
-          </div>
-        </section>
-
-        <section className="mt-20 border-t pt-10" style={{ borderColor: "rgba(232,163,61,0.4)" }}>
-          <p className="programme text-paper/65 text-[10.5px] tracking-[0.35em] uppercase mb-4">
-            Three pubs · within twenty minutes of the ground
-          </p>
-          <ul className="space-y-2 max-w-[40rem]">
-            {PUBS_NEAR_GROUND.map((p) => (
-              <li key={p.name} className="grid grid-cols-[10rem_1fr] text-[13.5px] leading-snug">
-                <span className="font-serif italic text-paper">{p.name}</span>
-                <span className="text-paper/75">{p.walk} · {p.note}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div
-            className="mt-16 border-t pt-6"
-            style={{ borderColor: "rgba(232,163,61,0.35)" }}
-          >
-            <p className="programme text-[10.5px] tracking-[0.35em] uppercase mb-2" style={{ color: "rgba(232,163,61,0.9)" }}>
-              Operational caveat
-            </p>
-            <p className="font-serif text-[1.15rem] italic leading-snug max-w-[40rem]">
-              Stadium to ferry terminal is roughly one kilometre, fifteen to
-              twenty minutes on foot. The 21:15 is the last sailing of the
-              day; miss it and we sleep in Tórshavn.
-            </p>
-          </div>
-        </section>
-      </div>
+      <p className="caption mt-10 max-w-[40rem] tnum">
+        Stadium to ferry terminal is roughly one kilometre, fifteen to twenty
+        minutes on foot. The 21:15 is the last sailing of the day.
+      </p>
     </article>
+  );
+}
+
+function Field({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="label">{label}</p>
+      <p className="text-[14.5px] mt-0.5">{value}</p>
+    </div>
   );
 }
 
@@ -159,21 +128,13 @@ type FerryRow = { dep: string; arr: string; note: string; highlight: boolean };
 function FerryColumn({ title, rows }: { title: string; rows: FerryRow[] }) {
   return (
     <div>
-      <p className="caption text-paper/65 mb-4">{title}</p>
-      <ul className="space-y-2.5">
+      <p className="label mb-3">{title}</p>
+      <ul>
         {rows.map((r) => (
-          <li
-            key={r.dep}
-            className="font-serif text-[13.5px] leading-snug"
-            style={{ color: r.highlight ? "#FBF8F1" : "rgba(245,240,232,0.78)" }}
-          >
-            <span className="font-mono tracking-wide text-amber text-[12px]">{r.dep}</span>
-            <span style={{ color: r.highlight ? "#FBF8F1" : "rgba(232,163,61,0.85)" }} className="ml-1">
-              {r.arr}
-            </span>
-            {r.note ? (
-              <span className="ml-2 text-paper/55 font-serif italic text-[12px]">{r.note}</span>
-            ) : null}
+          <li key={r.dep} className="grid grid-cols-[5.5rem_1fr_auto] gap-x-3 py-2 border-b border-basalt/10 items-baseline">
+            <span className="code text-fjord tnum">{r.dep}</span>
+            <span className="text-[14px] text-basalt">{r.arr}</span>
+            {r.highlight ? <StatusPill tone="warn" label="Critical" /> : r.note ? <span className="caption">{r.note}</span> : <span className="caption tnum">—</span>}
           </li>
         ))}
       </ul>
@@ -181,35 +142,17 @@ function FerryColumn({ title, rows }: { title: string; rows: FerryRow[] }) {
   );
 }
 
-function TimelineNode({
-  time, title, sub, highlight, critical,
-}: {
-  time: string;
-  title: string;
-  sub?: string;
-  highlight?: boolean;
-  critical?: boolean;
-}) {
+function TimelineNode({ time, title, sub, critical }: { time: string; title: string; sub?: string; critical?: boolean }) {
   return (
-    <li className="relative">
-      <span className="absolute -left-[1.65rem] top-[0.45rem] block" aria-hidden>
-        <svg width="14" height="14" viewBox="0 0 14 14">
-          <line x1="2" y1="2" x2="12" y2="12" stroke={critical ? "#E8A33D" : highlight ? "#FBF8F1" : "rgba(232,163,61,0.85)"} strokeWidth="1.7" />
-          <line x1="2" y1="12" x2="12" y2="2" stroke={critical ? "#E8A33D" : highlight ? "#FBF8F1" : "rgba(232,163,61,0.85)"} strokeWidth="1.7" />
-        </svg>
-      </span>
-      <div>
-        <p className="font-mono text-[12px] tracking-wide" style={{ color: "rgba(232,163,61,0.85)" }}>
-          {time}
-        </p>
-        <p
-          className="font-serif text-[1.05rem] leading-snug"
-          style={{ color: critical || highlight ? "#FBF8F1" : "rgba(245,240,232,0.95)" }}
-        >
-          {title}
-        </p>
-        {sub ? <p className="caption text-paper/65 mt-1">{sub}</p> : null}
-      </div>
+    <li className="relative pb-6">
+      <span
+        aria-hidden
+        className="absolute -left-[1.65rem] top-[0.55rem] block w-2 h-2"
+        style={{ background: critical ? "var(--rust)" : "var(--basalt)", opacity: critical ? 1 : 0.55 }}
+      />
+      <p className="code text-fjord tnum">{time}</p>
+      <p className={`font-medium text-[14.5px] ${critical ? "text-rust" : "text-basalt"}`}>{title}</p>
+      {sub ? <p className="caption mt-1">{sub}</p> : null}
     </li>
   );
 }
