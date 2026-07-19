@@ -44,7 +44,7 @@ export type SelectedFeature =
   | { kind: "leg"; leg: JourneyLeg }
   | null;
 
-export type MapFilter = "journey" | "places" | "match" | "stay";
+export type MapFilter = "journey" | "places" | "match" | "stay" | "suðuroy";
 
 interface FaroesMapProps {
   onSelect: (feature: SelectedFeature) => void;
@@ -185,6 +185,17 @@ export default function FaroesMap({
         return ALL_PLACES.filter(
           (p) => p.id === "oravik" || p.id === "krambatangi",
         );
+      case "suðuroy":
+        return ALL_PLACES.filter(
+          (p) =>
+            p.id === "oravik" ||
+            p.id === "krambatangi" ||
+            p.id === "hov" ||
+            p.id === "hvannhagi" ||
+            p.id === "beinisvord" ||
+            p.id === "tvoroyri" ||
+            p.id === "akraberg",
+        );
       default:
         return JOURNEY_STOPS;
     }
@@ -217,6 +228,15 @@ export default function FaroesMap({
         [
           [-6.84, 61.52],
           [-6.78, 61.56],
+        ],
+        { padding: 40, duration: prefersReducedMotion() ? 0 : 600 },
+      );
+    } else if (filter === "suðuroy") {
+      // Zoomed to Suðuroy — from Akraberg in the south to Tvøroyri in the north
+      map.fitBounds(
+        [
+          [-6.84, 61.38],
+          [-6.76, 61.57],
         ],
         { padding: 40, duration: prefersReducedMotion() ? 0 : 600 },
       );
@@ -288,6 +308,9 @@ export default function FaroesMap({
                 "accommodation", P.moss,
                 "airport", P.fjord,
                 "harbour", P.fjord,
+                "hike", P.moss,
+                "viewpoint", P.yellow,
+                "food", P.rust,
                 P.basalt,
               ],
             ],

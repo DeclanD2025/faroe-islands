@@ -10,7 +10,10 @@ export type PlaceCategory =
   | "accommodation"
   | "match"
   | "visit"
-  | "transfer";
+  | "transfer"
+  | "hike"
+  | "viewpoint"
+  | "food";
 
 export interface TripPlace {
   id: string;
@@ -129,6 +132,57 @@ export const SAVED_PLACES: TripPlace[] = [
     status: "confirmed",
     description: "Final-night village on Vágar. Guesthouse Hugo, ~10 min from the airport — the sensible last stop before the Saturday morning flight.",
     practicalNote: "Guesthouse Hugo, 2 Bakkavegur. Conf. 5924180270, PIN 9432. Check-in from 14:00.",
+  },
+  {
+    id: "hov",
+    name: "Hov",
+    displayName: "Hov village",
+    coordinates: [-6.795, 61.506],
+    category: "visit",
+    day: "Wed 29 Jul",
+    status: "confirmed",
+    description: "Small south-coast village on Suðuroy. Viking chieftain's burial mound overlooks the harbour. Starting point for the Hvannhagi ridge walk.",
+    practicalNote: "Bus 700 from Øravík — two stops south. The chieftain's mound is a 30 min loop from the bus stop.",
+  },
+  {
+    id: "hvannhagi",
+    name: "Hvannhagi",
+    displayName: "Hvannhagi ridge",
+    coordinates: [-6.782, 61.508],
+    category: "hike",
+    day: "Wed 29 Jul",
+    description: "2–3 hour ridge walk marked with orange T-posts. A cliff-edge lake faces Stóra Dímun island. The markers vanish in fog — not safe in low visibility.",
+    practicalNote: "Start from Hov. Orange posts. No facilities on the ridge. Bring water, waterproofs, and offline maps.",
+  },
+  {
+    id: "beinisvord",
+    name: "Beinisvørð",
+    displayName: "Beinisvørð (469 m)",
+    coordinates: [-6.79, 61.425],
+    category: "viewpoint",
+    day: "Wed 29 Jul",
+    description: "The defining 469 m basalt cliff of Suðuroy, at the island's south-west corner. Walk past the gate north of the lighthouse for the best view. Pointless in fog.",
+    practicalNote: "Drive or bus to the lighthouse road. ~30–60 min visit. No shelter at the top — wind is strong even on calm days.",
+  },
+  {
+    id: "tvoroyri",
+    name: "Tvøroyri",
+    displayName: "Tvøroyri · Hotel",
+    coordinates: [-6.812, 61.556],
+    category: "food",
+    day: "Wed 29 Jul",
+    description: "Suðuroy's main town. Hotel Tvøroyri has a pizzeria, bar, and the same local crowd every night. Nearest proper supermarket and pharmacy to Øravík.",
+    practicalNote: "Hotel Tvøroyri serves until late. Bónus supermarket open until 18:00 weekdays. Last Bus 700 north ~22:00.",
+  },
+  {
+    id: "akraberg",
+    name: "Akraberg",
+    displayName: "Akraberg lighthouse",
+    coordinates: [-6.81, 61.393],
+    category: "viewpoint",
+    day: "Wed 29 Jul",
+    description: "The southernmost point of Suðuroy. Lighthouse, radio mast, and open Atlantic beyond. No land between here and the Shetlands. Short drive from Beinisvørð.",
+    practicalNote: "Narrow road. Combined with Beinisvørð for a southern loop. No facilities.",
   },
 ];
 

@@ -12,6 +12,7 @@ import { DAYS, type DayStage } from "@/lib/data/itinerary";
 import type { SelectedFeature } from "@/components/map/faroes-map";
 import type maplibregl from "maplibre-gl";
 import { DayOneDetail } from "@/components/day-one-detail";
+import { DayTwoDetail } from "@/components/day-two-detail";
 
 const FaroesMap = dynamic(() => import("@/components/map/faroes-map"), {
   ssr: false,
@@ -105,8 +106,9 @@ export function DayDetail({ num: rawNum }: { num: string }) {
 
   const dayNum = parseInt(day.num, 10);
 
-  // Day 1 gets the full operational brief
+  // Day 1 gets the full operational brief, Day 2 gets the Suðuroy exploration
   if (dayNum === 1) return <DayOneDetail />;
+  if (dayNum === 2) return <DayTwoDetail />;
 
   return (
     <article className="px-6 sm:px-8 lg:px-12 pt-8 sm:pt-10 pb-20 max-w-[72rem]">
