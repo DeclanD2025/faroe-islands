@@ -541,7 +541,7 @@ export function DayOneDetail() {
             </li>
             <li className="flex items-start gap-2 text-[14px]">
               <span className="text-rust font-bold mt-px">!</span>
-              <span><strong>ScotRail delays.</strong> The 13:59 is recommended, but if it's cancelled, the 14:59 is the last safe option. Leave a 30 min buffer at Haymarket for tram connection.</span>
+              <span><strong>ScotRail delays.</strong> If the 11:59 is cancelled, the 12:59 or 13:59 still leave plenty of time. 30 min buffer at Haymarket for the tram.</span>
             </li>
             <li className="flex items-start gap-2 text-[14px]">
               <span className="text-rust font-bold mt-px">!</span>
