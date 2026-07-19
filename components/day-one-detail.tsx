@@ -10,6 +10,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type maplibregl from "maplibre-gl";
 import type { SelectedFeature } from "@/components/map/faroes-map";
+import { LiveBoard, type LiveRow } from "@/components/live-board";
 import {
   HOME_TO_AIRPORT,
   SCOTRAIL_DEPARTURES,
@@ -315,56 +316,50 @@ export function DayOneDetail() {
 
           {/* ——— 2. ScotRail Departure Board ——— */}
           <SectionHeader label="02 · ScotRail" title="Bellshill → Haymarket · Departure Board" subtitle="Monday 27 July 2026 · confirm at scotrail.co.uk" />
-          <div className="overflow-x-auto mb-6">
-            <table className="w-full text-[13px] border-collapse">
-              <thead>
-                <tr className="border-b-2 border-basalt/20 text-left">
-                  <th className="pb-2 pr-4 label">Depart</th>
-                  <th className="pb-2 pr-4 label">Arrive</th>
-                  <th className="pb-2 label">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SCOTRAIL_DEPARTURES.map((t, i) => (
-                  <tr key={i} className="border-b border-basalt/10">
-                    <td className="py-2.5 pr-4 code text-fjord tnum font-medium">{t.dep}</td>
-                    <td className="py-2.5 pr-4 code text-fjord tnum">{t.arr}</td>
-                    <td className="py-2.5 caption">{t.notes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mb-4">
+            <LiveBoard
+              title="Departures"
+              sourceUrl="https://www.scotrail.co.uk/plan-your-journey"
+              sourceLabel="ScotRail live"
+              columns={[
+                { key: "dep", label: "Depart", mono: true },
+                { key: "arr", label: "Arrive", mono: true },
+                { key: "notes", label: "Notes" },
+              ]}
+              highlightKey="dep"
+              highlightValue="11:59"
+              fallbackRows={SCOTRAIL_DEPARTURES as unknown as LiveRow[]}
+            />
           </div>
           <p className="caption">
             <strong>11:59</strong> is the safest pick — Haymarket 13:02, EDI by ~13:30, bags of time. 
             <strong>12:59</strong> works too if you want another hour at home. Off-peak return ~£18. ScotRail app or Bellshill machine.
           </p>
 
+          {/* ——— Route Map ——— */}
+          <div className="mt-8 mb-8">
+            <p className="label mb-2">Route map</p>
+            <div style={{ minHeight: 280 }}>
+              <FaroesMap onSelect={handleSelect} selected={selected} filter="journey" mapRef={mapRef} />
+            </div>
+          </div>
+
           {/* ——— 3. EDI Departure Board + Pubs ——— */}
           <SectionHeader label="03 · Edinburgh Airport" title="Departure Board · EDI → FAE" subtitle="Monday 27 July 2026" />
-          <div className="overflow-x-auto mb-3">
-            <table className="w-full text-[13px] border-collapse">
-              <thead>
-                <tr className="border-b-2 border-basalt/20 text-left">
-                  <th className="pb-2 pr-4 label">Time</th>
-                  <th className="pb-2 pr-4 label">Flight</th>
-                  <th className="pb-2 pr-4 label">Destination</th>
-                  <th className="pb-2 pr-4 label">Gate</th>
-                  <th className="pb-2 label">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {EDI_DEPARTURE_BOARD.map((f, i) => (
-                  <tr key={i} className="border-b border-basalt/10">
-                    <td className="py-2.5 pr-4 code text-fjord tnum font-medium">{f.time}</td>
-                    <td className="py-2.5 pr-4 font-medium">{f.flight}</td>
-                    <td className="py-2.5 pr-4">{f.destination}</td>
-                    <td className="py-2.5 pr-4 code text-[12px] text-fjord">{f.gate}</td>
-                    <td className="py-2.5"><Badge tone="ok">{f.status}</Badge></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mb-3">
+            <LiveBoard
+              title="Departures"
+              sourceUrl="https://www.edinburghairport.com/flights/departures"
+              sourceLabel="EDI live departures"
+              columns={[
+                { key: "time", label: "Time", mono: true, narrow: true },
+                { key: "flight", label: "Flight" },
+                { key: "destination", label: "Destination" },
+                { key: "gate", label: "Gate", mono: true },
+                { key: "status", label: "Status" },
+              ]}
+              fallbackRows={EDI_DEPARTURE_BOARD as unknown as LiveRow[]}
+            />
           </div>
 
           <p className="label mt-4 mb-2">Pubs & food near the gate</p>
@@ -464,30 +459,20 @@ export function DayOneDetail() {
           </div>
 
           <p className="label mb-2">Monday 27 July · Tórshavn → Krambatangi sailings</p>
-          <div className="overflow-x-auto mb-4">
-            <table className="w-full text-[13px] border-collapse">
-              <thead>
-                <tr className="border-b-2 border-basalt/20 text-left">
-                  <th className="pb-2 pr-4 label">Depart</th>
-                  <th className="pb-2 pr-4 label">Arrive</th>
-                  <th className="pb-2 label">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {FERRY_BOARD.departures.map((s, i) => {
-                  const isOurs = s.dep === "21:15";
-                  return (
-                    <tr key={i} className={`border-b border-basalt/10 ${isOurs ? "bg-rust/5" : ""}`}>
-                      <td className={`py-2.5 pr-4 code tnum font-medium ${isOurs ? "text-rust" : "text-fjord"}`}>{s.dep}</td>
-                      <td className="py-2.5 pr-4 code tnum text-fjord">{s.arr}</td>
-                      <td className="py-2.5 caption">
-                        {isOurs ? <span className="text-rust font-medium">{s.note}</span> : s.note}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="mb-4">
+            <LiveBoard
+              title="Sailings"
+              sourceUrl="https://booking.ssl.fo"
+              sourceLabel="SSL live timetable"
+              columns={[
+                { key: "dep", label: "Depart", mono: true, narrow: true },
+                { key: "arr", label: "Arrive", mono: true, narrow: true },
+                { key: "note", label: "Notes" },
+              ]}
+              highlightKey="dep"
+              highlightValue="21:15"
+              fallbackRows={FERRY_BOARD.departures as unknown as LiveRow[]}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 mb-3">
@@ -569,14 +554,6 @@ export function DayOneDetail() {
           <LiveClock />
           <DepartureCountdown />
           <WeatherWidget />
-
-          {/* Map */}
-          <div>
-            <p className="label mb-2">Route map</p>
-            <div style={{ minHeight: 220 }}>
-              <FaroesMap onSelect={handleSelect} selected={selected} filter="journey" mapRef={mapRef} />
-            </div>
-          </div>
 
           <div className="space-y-6">
 
