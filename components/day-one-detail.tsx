@@ -31,9 +31,9 @@ const TIMELINE_STEPS = [
     title: "Home",
     subtitle: "40 Liberty Road, Bellshill ML4 2EX",
     middleLabel: "Walk",
-    middleValue: "~6 min",
+    middleValue: "~20 min",
     rightLabel: "Leave by",
-    rightValue: "08:35",
+    rightValue: "08:30",
   },
   {
     num: 2,
@@ -106,7 +106,7 @@ const TRAIN_OPTIONS = {
 };
 
 const SUMMARY_ITEMS = [
-  { icon: "⌂", label: "Leave home by", time: "08:35", note: "Bellshill" },
+  { icon: "⌂", label: "Leave home by", time: "08:30", note: "Bellshill" },
   { icon: "⏻", label: "Take the train", time: "08:59", note: "ScotRail" },
   { icon: "✈", label: "Airport arrival", time: "~10:40", note: "Edinburgh" },
   { icon: "◷", label: "Contingency", time: "~6h 30m", note: "before flight" },
@@ -476,7 +476,7 @@ function MobileDecisionPanel() {
   return (
     <div className="border border-basalt/15 rounded-[8px] p-4">
       <p className="text-[10px] uppercase tracking-[0.12em] text-fjord/60">Leave home by</p>
-      <p className="code tnum text-[36px] font-medium text-basalt leading-none mt-1">08:35</p>
+      <p className="code tnum text-[36px] font-medium text-basalt leading-none mt-1">08:30</p>
       <p className="text-[13px] text-basalt/65 mt-2">
         Take the <strong>08:59</strong> train from Bellshill.
         Expected airport arrival around <strong>10:40</strong>.
