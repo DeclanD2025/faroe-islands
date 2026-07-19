@@ -28,8 +28,10 @@ const NAV_ITEMS = [
   { href: "/",          label: "Now" },
   { href: "/itinerary", label: "Trip" },
   { href: "/places",    label: "Map" },
+  { href: "/explore",   label: "Explore" },
   { href: "/match-day", label: "Match" },
   { href: "/packing",   label: "Prepare" },
+  { href: "/hikes",     label: "Hikes" },
 ];
 
 export const metadata: Metadata = {
