@@ -1,9 +1,6 @@
 // =============================================================================
-// FaroesMap — expedition-grade interactive MapLibre GL map.
-//
-// Custom North Atlantic palette, dual-stroke itinerary routes with semantic
-// dash patterns, 32px expedition waypoint markers with amber fill and cream
-// halo, custom unified controls, itinerary-geometry camera fitting.
+// FaroesMap — restrained expedition map with subtle route overlays,
+// compact waypoint markers, cleaned-up controls, and a tidy legend.
 // =============================================================================
 
 "use client";
@@ -315,7 +312,7 @@ export default function FaroesMap({
         });
         map.setTerrain({ source: "terrain-dem", exaggeration: 1.25 });
 
-        // ---- Route CASING (dark outer stroke, wider) ----
+        // ---- Route CASING (subtle dark outer stroke) ----
         map.addLayer({
           id: LAYER_LEG_CASING,
           type: "line",
@@ -323,17 +320,17 @@ export default function FaroesMap({
           layout: { "line-cap": "round", "line-join": "round" },
           paint: {
             "line-color": P.routeDark,
-            "line-width": 6,
-            "line-opacity": 0.55,
+            "line-width": 4,
+            "line-opacity": 0.45,
             "line-dasharray": ["match", ["get", "mode"],
               "ferry", ["literal", [8, 4]],
               "walk", ["literal", [3, 3]],
               ["literal", [1, 0]],
             ],
           },
-        });;
+        });
 
-        // ---- Route INNER LINE (amber, narrower) ----
+        // ---- Route INNER LINE (amber, restrained) ----
         map.addLayer({
           id: LAYER_LEG_LINES,
           type: "line",
@@ -341,8 +338,8 @@ export default function FaroesMap({
           layout: { "line-cap": "round", "line-join": "round" },
           paint: {
             "line-color": P.route,
-            "line-width": 3,
-            "line-opacity": 0.9,
+            "line-width": 2,
+            "line-opacity": 0.85,
             "line-dasharray": ["match", ["get", "mode"],
               "ferry", ["literal", [8, 4]],
               "walk", ["literal", [3, 3]],
@@ -360,55 +357,55 @@ export default function FaroesMap({
           layout: { "line-cap": "round", "line-join": "round" },
           paint: {
             "line-color": P.amber,
-            "line-width": 4,
+            "line-width": 3,
             "line-opacity": 1,
           },
         });
 
-        // ---- Place marker HALO (cream, larger) ----
+        // ---- Place marker HALO (subtle cream glow) ----
         map.addLayer({
           id: LAYER_PLACE_HALO,
           type: "circle",
           source: SOURCE_PLACES,
           paint: {
-            "circle-radius": 18,
+            "circle-radius": 11,
             "circle-color": P.cream,
-            "circle-opacity": 0.85,
+            "circle-opacity": 0.7,
             "circle-stroke-color": "transparent",
             "circle-stroke-width": 0,
           },
         });
 
-        // ---- Place marker (amber fill, dark border) ----
+        // ---- Place marker (compact amber dot, dark border) ----
         map.addLayer({
           id: LAYER_PLACE_CIRCLES,
           type: "circle",
           source: SOURCE_PLACES,
           paint: {
-            "circle-radius": ["case", ["has", "routeSequence"], 16, 11],
+            "circle-radius": ["case", ["has", "routeSequence"], 11, 7],
             "circle-color": P.amber,
             "circle-stroke-color": P.basalt,
-            "circle-stroke-width": 2,
+            "circle-stroke-width": 1.5,
             "circle-opacity": 1,
           },
         });
 
-        // ---- Selected marker (larger, halo) ----
+        // ---- Selected marker (subtly larger) ----
         map.addLayer({
           id: LAYER_PLACE_CIRCLES_SEL,
           type: "circle",
           source: SOURCE_PLACES,
           filter: ["==", ["get", "id"], ""],
           paint: {
-            "circle-radius": 24,
+            "circle-radius": 14,
             "circle-color": P.amber,
             "circle-stroke-color": P.cream,
-            "circle-stroke-width": 3,
+            "circle-stroke-width": 2.5,
             "circle-opacity": 1,
           },
         });
 
-        // ---- Place numbers (on top of everything) ----
+        // ---- Place numbers (small, centred on marker) ----
         map.addLayer({
           id: LAYER_PLACE_NUMBERS,
           type: "symbol",
@@ -416,8 +413,8 @@ export default function FaroesMap({
           filter: ["has", "routeSequence"],
           layout: {
             "text-field": ["to-string", ["get", "routeSequence"]],
-            "text-font": ["Noto Sans Bold"],
-            "text-size": 12,
+            "text-font": ["Noto Sans Medium"],
+            "text-size": 10,
             "text-offset": [0, 0],
           },
           paint: {
@@ -425,7 +422,7 @@ export default function FaroesMap({
           },
         });
 
-        // ---- Place name labels ----
+        // ---- Place name labels (restrained) ----
         map.addLayer({
           id: LAYER_PLACE_LABELS,
           type: "symbol",
@@ -433,15 +430,15 @@ export default function FaroesMap({
           layout: {
             "text-field": ["get", "name"],
             "text-font": ["Noto Sans Regular"],
-            "text-size": 11,
-            "text-offset": [0, 1.8],
+            "text-size": 10,
+            "text-offset": [0, 1.6],
             "text-anchor": "top",
             "text-optional": true,
           },
           paint: {
-            "text-color": P.text,
-            "text-halo-color": P.basalt,
-            "text-halo-width": 1.5,
+            "text-color": P.basalt,
+            "text-halo-color": "rgba(246,242,231,0.85)",
+            "text-halo-width": 2,
           },
           minzoom: 9,
         });
@@ -544,32 +541,40 @@ export default function FaroesMap({
       {loaded && (
         <div
           className="absolute bottom-3 left-3 z-10 flex gap-3 text-[11px]"
-          style={{ background: P.panel, color: P.text, padding: "6px 10px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.12)" }}
+          style={{ background: "rgba(246,242,231,0.92)", color: P.routeDark, padding: "5px 9px", borderRadius: 5, border: `1px solid ${P.contour}` }}
           role="note"
           aria-label="Route legend"
         >
-          <LegendItem label="Bus" dash={[1, 0]} color={P.route} />
-          <LegendItem label="Ferry" dash={[8, 4]} color={P.route} />
-          <LegendItem label="Walk" dash={[3, 3]} color={P.route} />
+          <LegendItem label="Bus" dash={[1, 0]} color={P.basalt} />
+          <LegendItem label="Ferry" dash={[8, 4]} color={P.basalt} />
+          <LegendItem label="Walk" dash={[3, 3]} color={P.basalt} />
         </div>
       )}
 
       {/* ---- Custom unified controls ---- */}
       {loaded && (
         <div
-          className="absolute top-3 right-3 z-10 flex flex-col gap-0 rounded-[10px] overflow-hidden"
-          style={{ background: P.panel, border: "1px solid rgba(255,255,255,0.12)" }}
+          className="absolute top-3 right-3 z-10 flex flex-col gap-0 rounded-[6px] overflow-hidden"
+          style={{ background: "rgba(40,48,53,0.82)", border: "1px solid rgba(255,255,255,0.10)" }}
           role="group"
           aria-label="Map controls"
         >
-          <ControlBtn label="Zoom in" onClick={() => mapRef.current?.zoomIn()}>+</ControlBtn>
-          <ControlBtn label="Zoom out" onClick={() => mapRef.current?.zoomOut()}>−</ControlBtn>
-          <ControlBtn label="Fit trip" onClick={fitTrip}>⌂</ControlBtn>
+          <ControlBtn label="Zoom in" onClick={() => mapRef.current?.zoomIn()}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
+          </ControlBtn>
+          <ControlBtn label="Zoom out" onClick={() => mapRef.current?.zoomOut()}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><line x1="3" y1="8" x2="13" y2="8"/></svg>
+          </ControlBtn>
+          <ControlBtn label="Fit trip" onClick={fitTrip}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="5" y1="2" x2="5" y2="5"/><line x1="11" y1="2" x2="11" y2="5"/><line x1="5" y1="14" x2="5" y2="11"/><line x1="11" y1="14" x2="11" y2="11"/></svg>
+          </ControlBtn>
           <ControlBtn label="Fullscreen" onClick={() => {
             if (typeof document !== "undefined" && document.fullscreenEnabled) {
               containerRef.current?.requestFullscreen?.()?.catch(() => {});
             }
-          }}>⛶</ControlBtn>
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6,2 2,2 2,6"/><polyline points="10,14 14,14 14,10"/><polyline points="14,6 14,2 10,2"/><polyline points="2,10 2,14 6,14"/></svg>
+          </ControlBtn>
         </div>
       )}
 
@@ -631,16 +636,16 @@ function LegendItem({ label, dash, color }: { label: string; dash: number[]; col
   const isSolid = dash[0] === 1 && dash[1] === 0;
   return (
     <div className="flex items-center gap-1.5">
-      <svg width="28" height="2" className="shrink-0" aria-hidden>
+      <svg width="22" height="10" className="shrink-0" aria-hidden>
         <line
-          x1="0" y1="1" x2="28" y2="1"
+          x1="1" y1="5" x2="21" y2="5"
           stroke={color}
-          strokeWidth="2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeDasharray={isSolid ? undefined : dash.join(" ")}
         />
       </svg>
-      <span className="text-[10px] opacity-70">{label}</span>
+      <span className="text-[10px] opacity-60">{label}</span>
     </div>
   );
 }
