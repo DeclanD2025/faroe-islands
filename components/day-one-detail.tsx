@@ -6,7 +6,7 @@
 
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type maplibregl from "maplibre-gl";
 import type { SelectedFeature } from "@/components/map/faroes-map";
@@ -63,6 +63,192 @@ function Badge({ children, tone }: { children: string; tone?: "warn" | "ok" | "i
     <span className={`text-[10.5px] uppercase tracking-[0.1em] font-medium border px-1.5 py-px ${c}`}>
       {children}
     </span>
+  );
+}
+
+// =============================================================================
+// Widget: Live Faroe Islands clock
+// =============================================================================
+function LiveClock() {
+  const [time, setTime] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      const faroe = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Atlantic/Faroe",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }).format(now);
+      const faroeDate = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Atlantic/Faroe",
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      }).format(now);
+      setTime(faroe);
+      setDate(faroeDate);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="border border-basalt/15 p-3">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-fjord/60 mb-1">Faroe Islands time</p>
+      <p className="code text-fjord tnum text-[22px] font-medium leading-none">{time || "—:—:—"}</p>
+      <p className="text-[11px] text-fjord/50 mt-0.5">{date || "—"} · WEST (UTC+1)</p>
+    </div>
+  );
+}
+
+// =============================================================================
+// Widget: Countdown to EDI departure
+// =============================================================================
+function DepartureCountdown() {
+  const [remaining, setRemaining] = useState<{ d: number; h: number; m: number; s: number; past: boolean }>({
+    d: 0, h: 0, m: 0, s: 0, past: false,
+  });
+
+  useEffect(() => {
+    const target = new Date("2026-07-27T16:10:00Z").getTime(); // 17:10 BST = 16:10 UTC
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        setRemaining({ d: 0, h: 0, m: 0, s: 0, past: true });
+        return;
+      }
+      setRemaining({
+        past: false,
+        d: Math.floor(diff / 86_400_000),
+        h: Math.floor((diff % 86_400_000) / 3_600_000),
+        m: Math.floor((diff % 3_600_000) / 60_000),
+        s: Math.floor((diff % 60_000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  return (
+    <div className="border border-basalt/15 p-3">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-rust/70 mb-1">Departure countdown</p>
+      {remaining.past ? (
+        <p className="code text-rust tnum text-[16px] font-medium">In the air</p>
+      ) : (
+        <div>
+          <p className="code text-basalt tnum text-[22px] font-medium leading-none">
+            {remaining.d > 0 && <>{remaining.d}<span className="text-[14px] text-fjord/60 ml-0.5">d</span>{" "}</>}
+            {pad(remaining.h)}<span className="text-[14px] text-fjord/60 ml-0.5">h</span>{" "}
+            {pad(remaining.m)}<span className="text-[14px] text-fjord/60 ml-0.5">m</span>{" "}
+            {pad(remaining.s)}<span className="text-[14px] text-fjord/60 ml-0.5">s</span>
+          </p>
+        </div>
+      )}
+      <p className="text-[11px] text-fjord/50 mt-0.5">EDI 17:10 BST · 27 Jul 2026</p>
+    </div>
+  );
+}
+
+// =============================================================================
+// Widget: yr.no weather for Tórshavn
+// =============================================================================
+interface WeatherData {
+  temp: number | null;
+  wind: number | null;
+  precip: number | null;
+  symbol: string;
+  desc: string;
+  loading: boolean;
+  error: boolean;
+}
+
+function formatSymbol(code: string): string {
+  const map: Record<string, string> = {
+    clearsky_day: "Clear sky", clearsky_night: "Clear sky",
+    fair_day: "Fair", fair_night: "Fair",
+    partlycloudy_day: "Partly cloudy", partlycloudy_night: "Partly cloudy",
+    cloudy: "Cloudy",
+    rainshowers_day: "Rain showers", rainshowers_night: "Rain showers",
+    heavyrainshowers_day: "Heavy rain showers",
+    rain: "Rain", lightrain: "Light rain", heavyrain: "Heavy rain",
+    lightrainshowers_day: "Light rain showers",
+    fog: "Fog",
+    snow: "Snow", lightsnow: "Light snow", heavysnow: "Heavy snow",
+    snowshowers_day: "Snow showers",
+    sleet: "Sleet",
+    rainshowersandthunder_day: "Rain & thunder",
+    heavyrainshowersandthunder_day: "Heavy rain & thunder",
+  };
+  return map[code] ?? code.replace(/_/g, " ");
+}
+
+function WeatherWidget() {
+  const [w, setW] = useState<WeatherData>({ temp: null, wind: null, precip: null, symbol: "", desc: "", loading: true, error: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch(
+          "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=62.0097&lon=-6.7716",
+          { headers: { "User-Agent": "faroe-islands-expedition-log/1.0 github.com/DeclanD2025" } }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (cancelled) return;
+        const ts = json.properties.timeseries[0];
+        const instant = ts.data.instant.details;
+        const next1h = ts.data.next_1_hours;
+        setW({
+          temp: instant.air_temperature,
+          wind: instant.wind_speed,
+          precip: next1h?.details?.precipitation_amount ?? null,
+          symbol: next1h?.summary?.symbol_code ?? "",
+          desc: formatSymbol(next1h?.summary?.symbol_code ?? ""),
+          loading: false,
+          error: false,
+        });
+      } catch {
+        if (!cancelled) setW((prev) => ({ ...prev, loading: false, error: true }));
+      }
+    };
+    fetchWeather();
+    // Refresh every 30 min
+    const id = setInterval(fetchWeather, 1_800_000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+
+  return (
+    <div className="border border-basalt/15 p-3">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-fjord/60 mb-2">Tórshavn · yr.no</p>
+      {w.loading ? (
+        <p className="caption">Loading weather…</p>
+      ) : w.error ? (
+        <p className="caption text-rust">Weather unavailable</p>
+      ) : (
+        <div className="space-y-1.5">
+          <div className="flex items-baseline gap-2">
+            <span className="code text-basalt tnum text-[22px] font-medium leading-none">{w.temp?.toFixed(0) ?? "—"}°</span>
+            <span className="text-[12px] text-fjord/70">{w.desc || "—"}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-0.5">
+            <p className="text-[11px] text-fjord/60">Wind <span className="code tnum text-fjord/80 ml-1">{w.wind?.toFixed(1) ?? "—"} m/s</span></p>
+            {w.precip != null && w.precip > 0 && (
+              <p className="text-[11px] text-fjord/60">Rain <span className="code tnum text-fjord/80 ml-1">{w.precip} mm</span></p>
+            )}
+          </div>
+        </div>
+      )}
+      <p className="text-[10px] text-fjord/40 mt-1.5">Data: met.no · CC BY 4.0</p>
+    </div>
   );
 }
 
@@ -379,7 +565,12 @@ export function DayOneDetail() {
         {/* ================================================================
             SIDEBAR — map + quick info
             ================================================================ */}
-        <aside className="space-y-6">
+        <aside className="space-y-4">
+          {/* Live widgets */}
+          <LiveClock />
+          <DepartureCountdown />
+          <WeatherWidget />
+
           {/* Map */}
           <div className="sticky top-8">
             <p className="label mb-2">Route map</p>
