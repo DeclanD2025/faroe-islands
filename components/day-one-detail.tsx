@@ -275,7 +275,7 @@ export function DayOneDetail() {
           <div>
             <p className="label text-rust">Day 1 · Monday · 27 July 2026</p>
             <h1 className="font-sans font-medium text-[clamp(1.5rem,3vw,2.2rem)] leading-[1.08] mt-1.5 text-basalt tracking-[-0.01em]">
-              Into the North Atlantic
+              Bellshill → Øravík
             </h1>
           </div>
           <div className="flex items-baseline gap-4 text-right">
@@ -290,8 +290,7 @@ export function DayOneDetail() {
           </div>
         </div>
         <p className="caption mt-3 max-w-[40rem]">
-          Bellshill → Edinburgh Airport → Vágar → Tórshavn → Krambatangi → Øravík.
-          One flight, one bus, one ferry, and a short hop to the guesthouse. The day the expedition begins.
+          One flight, one bus, one ferry, one short hop. ~10.5 hours door to door.
         </p>
       </header>
 
@@ -572,7 +571,7 @@ export function DayOneDetail() {
           <WeatherWidget />
 
           {/* Map */}
-          <div className="sticky top-8">
+          <div>
             <p className="label mb-2">Route map</p>
             <div style={{ minHeight: 220 }}>
               <FaroesMap onSelect={handleSelect} selected={selected} filter="journey" mapRef={mapRef} />
