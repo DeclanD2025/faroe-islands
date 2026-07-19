@@ -24,19 +24,6 @@ const cinzel = Cinzel({
   display: "swap",
 });
 
-const NAV_ITEMS = [
-  { href: "/day/1",     label: "Day 1" },
-  { href: "/day/2",     label: "Day 2" },
-  { href: "/day/3",     label: "Day 3" },
-  { href: "/day/4",     label: "Day 4" },
-  { href: "/day/5",     label: "Day 5" },
-  { href: "/places",    label: "Map" },
-  { href: "/explore",   label: "Explore" },
-  { href: "/hikes",     label: "Hikes" },
-  { href: "/match-day", label: "Match" },
-  { href: "/packing",   label: "Prepare" },
-];
-
 export const metadata: Metadata = {
   title: "Faroe Islands · 27 Jul – 1 Aug 2026",
   description:
@@ -59,12 +46,17 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable} ${cinzel.variable} h-full`}
     >
       <body className="min-h-full text-basalt bg-wool antialiased">
-        <RailNav items={NAV_ITEMS} />
-        <MobileNav items={NAV_ITEMS} />
-        <main id="expedition" className="pb-24 pl-0 sm:pt-0 sm:pl-28 lg:pl-36">
+        <RailNav />
+        <MobileNav />
+        {/* Mobile top header */}
+        <header className="lg:hidden fixed top-0 inset-x-0 z-30 h-14 bg-wool/95 backdrop-blur-sm border-b border-basalt/10 flex items-center justify-between px-4">
+          <span className="text-[15px] font-medium text-basalt tracking-[-0.01em]">Faroe Islands</span>
+          <span className="text-[11px] text-fjord/60">27 Jul – 1 Aug</span>
+        </header>
+        <main id="expedition" className="pb-24 pt-14 lg:pt-0 lg:pl-[236px]">
           {children}
         </main>
-        <footer className="border-t border-basalt/15 mt-24 py-10 pl-0 sm:pl-28 lg:pl-36">
+        <footer className="border-t border-basalt/15 mt-24 py-10 lg:pl-[236px]">
           <div className="mx-auto max-w-[64rem] px-6 sm:px-8 caption">
             <div className="flex flex-wrap items-baseline justify-between gap-y-3">
               <p>

@@ -1,18 +1,62 @@
-// Atlantic-navy rail — the spine of the field-guide navigation.
-// Narrow fixed-width rail on the left of the viewport on desktop. On
-// mobile, the same five labels collapse to a sticky bottom strip.
-//
-// Active label is underlined in rust-red (not a glowing pill). Thin fog
-// dividers between sections. No oversized padding, no large logo.
+// =============================================================================
+// RailNav — fixed desktop sidebar (236px) with structured navigation groups.
+// Mobile uses a compact bottom strip via MobileNav component.
+// =============================================================================
 
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type NavItem = { href: string; label: string };
+type NavItem = { href: string; label: string; subtitle?: string };
 
-export function RailNav({ items }: { items: NavItem[] }) {
+interface NavSection {
+  group: string;
+  items: NavItem[];
+}
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    group: "ITINERARY",
+    items: [
+      { href: "/day/1", label: "Day 1", subtitle: "The journey north" },
+      { href: "/day/2", label: "Day 2", subtitle: "Tórshavn & Ólavsøka" },
+      { href: "/day/3", label: "Day 3", subtitle: "Runavík" },
+      { href: "/day/4", label: "Day 4", subtitle: "Matchday" },
+      { href: "/day/5", label: "Day 5", subtitle: "Northern islands" },
+    ],
+  },
+  {
+    group: "PLAN",
+    items: [
+      { href: "/itinerary", label: "Full itinerary" },
+      { href: "/transport", label: "Transport" },
+      { href: "/bookings", label: "Bookings" },
+      { href: "/packing", label: "Documents" },
+    ],
+  },
+  {
+    group: "DISCOVER",
+    items: [
+      { href: "/places", label: "Map" },
+      { href: "/explore", label: "Places" },
+      { href: "/food-drink", label: "Food & drink" },
+      { href: "/shops", label: "Shops & local" },
+      { href: "/hikes", label: "Hiking routes" },
+    ],
+  },
+  {
+    group: "MATCH",
+    items: [
+      { href: "/match-day", label: "Match guide" },
+      { href: "/stadium", label: "Stadium" },
+      { href: "/tickets", label: "Tickets" },
+      { href: "/supporters", label: "Supporter info" },
+    ],
+  },
+];
+
+export function RailNav() {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -20,58 +64,72 @@ export function RailNav({ items }: { items: NavItem[] }) {
 
   return (
     <>
-      {/* Desktop rail · Atlantic navy · pinned to the left edge. */}
+      {/* Desktop sidebar · 236px · pinned left */}
       <aside
         aria-label="Faroe expedition navigation"
-        className="hidden sm:flex fixed top-0 left-0 bottom-0 w-28 lg:w-36 z-40 flex-col bg-navy text-wool"
-        style={{ paddingTop: "env(safe-area-inset-top)" }}
+        className="hidden lg:flex fixed top-0 left-0 bottom-0 z-40 flex-col bg-navy text-wool overflow-y-auto"
+        style={{ width: "236px", paddingTop: "env(safe-area-inset-top)" }}
       >
-        <Link
-          href="/"
-          className="block px-4 lg:px-6 pt-6 pb-8 border-b border-fog/15"
-        >
-          <p className="label text-wool/70">Faroes</p>
-          <p className="font-mono text-[12px] text-wool/85 mt-1">2026 · 27JUL–01AUG</p>
+        {/* Header */}
+        <Link href="/" className="block px-6 pt-6 pb-5">
+          <p
+            className="text-[28px] leading-[1.02] tracking-[-0.01em] text-wool"
+            style={{ fontFamily: "var(--font-cinzel)" }}
+          >
+            FAROE
+            <br />
+            ISLANDS
+          </p>
+          <p className="text-[11px] text-wool/60 mt-2 tracking-[0.06em]">
+            27 JUL – 1 AUG 2026
+          </p>
         </Link>
-        <nav className="flex-1 px-4 lg:px-6 pt-5">
-          <ul className="space-y-0">
-            {items.map((item) => (
-              <li key={item.href} className="border-b border-fog/10 first:border-t first:border-fog/15">
-                <Link href={item.href} aria-current={isActive(item.href) ? "page" : undefined} className="nav-link">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+
+        {/* Navigation sections */}
+        <nav className="flex-1 px-0 pt-2">
+          {NAV_SECTIONS.map((section) => (
+            <div key={section.group} className="mb-4">
+              <p className="text-[9.5px] uppercase tracking-[0.18em] text-wool/45 px-6 mb-1.5">
+                {section.group}
+              </p>
+              <ul>
+                {section.items.map((item) => {
+                  const active = isActive(item.href);
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        className={`block px-6 py-2 text-[13px] leading-[1.3] border-l-[3px] transition-colors min-h-[44px] flex flex-col justify-center ${
+                          active
+                            ? "text-wool border-rust bg-white/[0.06]"
+                            : "text-wool/65 border-transparent hover:text-wool/85 hover:bg-white/[0.03]"
+                        }`}
+                      >
+                        <span className="font-medium">{item.label}</span>
+                        {item.subtitle && (
+                          <span className="text-[11px] text-wool/45 mt-0.5 leading-tight">
+                            {item.subtitle}
+                          </span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
-        <div className="px-4 lg:px-6 pb-6 pt-5 border-t border-fog/15">
-          <p className="label text-wool/55">Codename</p>
-          <p className="caption text-wool/55 mt-1">FAROE 2026</p>
+
+        {/* Footer */}
+        <div className="px-6 pb-6 pt-4 border-t border-white/[0.08]">
+          <p className="text-[10px] text-wool/35 leading-[1.4]">
+            Always check local conditions and live travel updates.
+          </p>
         </div>
       </aside>
 
-      {/* Mobile bottom strip — same five labels, no fade-in, no rail. */}
-      <nav
-        aria-label="Faroe expedition navigation (mobile)"
-        className="sm:hidden fixed inset-x-0 bottom-0 z-40 bg-navy text-wool border-t border-fog/15"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      >
-        <ul className="grid grid-cols-5">
-          {items.map((item) => (
-            <li key={item.href + "-m"}>
-              <Link
-                href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                className={`block text-center py-3 text-[9.5px] sm:text-[10px] tracking-[0.1em] uppercase whitespace-nowrap border-t-2 transition-colors ${
-                  isActive(item.href) ? "text-wool border-rust" : "text-fog/80 border-transparent"
-                }`}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+
     </>
   );
 }

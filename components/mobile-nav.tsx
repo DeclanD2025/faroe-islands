@@ -1,6 +1,7 @@
 // =============================================================================
 // MobileNav — bottom navigation for narrow viewports.
-// Maximum 5 primary items. "More" opens a drawer for secondary items.
+// Shows day numbers 1-5 prominently, plus a "More" drawer for secondary items
+// matching the desktop sidebar structure.
 // =============================================================================
 
 "use client";
@@ -11,38 +12,45 @@ import { useState } from "react";
 
 type NavItem = { href: string; label: string };
 
-const PRIMARY_LABELS = new Set(["Day 1", "Day 2", "Day 3", "Day 4", "Day 5"]);
+const PRIMARY: NavItem[] = [
+  { href: "/day/1", label: "Day 1" },
+  { href: "/day/2", label: "Day 2" },
+  { href: "/day/3", label: "Day 3" },
+  { href: "/day/4", label: "Day 4" },
+  { href: "/day/5", label: "Day 5" },
+];
 
-export function MobileNav({ items }: { items: NavItem[] }) {
+const SECONDARY: NavItem[] = [
+  { href: "/places", label: "Map" },
+  { href: "/explore", label: "Places" },
+  { href: "/food-drink", label: "Food & drink" },
+  { href: "/hikes", label: "Hiking routes" },
+  { href: "/match-day", label: "Match guide" },
+  { href: "/packing", label: "Documents" },
+];
+
+export function MobileNav() {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" || pathname === "" : pathname?.startsWith(href);
 
-  const primary = items.filter((i) => PRIMARY_LABELS.has(i.label));
-  const secondary = items.filter((i) => !PRIMARY_LABELS.has(i.label));
-
-  if (primary.length === 0) return null;
-
   return (
     <>
-      {/* Bottom nav bar */}
+      {/* Bottom nav bar — days 1-5 + More */}
       <nav
         aria-label="Primary navigation"
-        className="sm:hidden fixed inset-x-0 bottom-0 z-40 bg-navy text-wool border-t border-fog/15"
+        className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-navy text-wool border-t border-fog/15"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <ul
-          className="grid gap-0"
-          style={{ gridTemplateColumns: `repeat(${primary.length + (secondary.length > 0 ? 1 : 0)}, 1fr)` }}
-        >
-          {primary.map((item) => (
+        <ul className="grid grid-cols-5" style={{ gridTemplateColumns: `repeat(${PRIMARY.length}, 1fr)` }}>
+          {PRIMARY.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
-                className={`block text-center py-3 text-[10px] tracking-[0.12em] uppercase font-medium whitespace-nowrap border-t-2 transition-colors min-h-[48px] flex items-center justify-center ${
+                className={`block text-center py-3 text-[10px] font-medium whitespace-nowrap border-t-2 transition-colors min-h-[48px] flex items-center justify-center ${
                   isActive(item.href)
                     ? "text-wool border-rust"
                     : "text-fog/75 border-transparent"
@@ -52,37 +60,35 @@ export function MobileNav({ items }: { items: NavItem[] }) {
               </Link>
             </li>
           ))}
-          {secondary.length > 0 && (
-            <li>
-              <button
-                type="button"
-                onClick={() => setMoreOpen(true)}
-                aria-expanded={moreOpen}
-                className="w-full text-center py-3 text-[10px] tracking-[0.12em] uppercase font-medium text-fog/75 whitespace-nowrap border-t-2 border-transparent min-h-[48px] flex items-center justify-center"
-              >
-                More
-              </button>
-            </li>
-          )}
         </ul>
+
+        {/* More button */}
+        <button
+          type="button"
+          onClick={() => setMoreOpen(true)}
+          aria-label="More navigation"
+          className="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center text-[20px] text-fog/60 hover:text-wool transition-colors"
+        >
+          ☰
+        </button>
       </nav>
 
       {/* More drawer */}
       {moreOpen && (
-        <div className="sm:hidden fixed inset-0 z-50">
+        <div className="lg:hidden fixed inset-0 z-50">
           <div
-            className="absolute inset-0 bg-basalt/30"
+            className="absolute inset-0 bg-basalt/20"
             onClick={() => setMoreOpen(false)}
             aria-hidden
           />
           <div
-            className="absolute inset-x-0 bottom-0 bg-navy text-wool border-t border-fog/15 rounded-t-lg"
+            className="absolute inset-x-0 bottom-0 bg-navy text-wool border-t border-fog/15 rounded-t-lg max-h-[60vh] overflow-y-auto"
             style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
             role="dialog"
             aria-label="More navigation"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-fog/10">
-              <p className="label text-wool/60">More</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-wool/50">More</p>
               <button
                 type="button"
                 onClick={() => setMoreOpen(false)}
@@ -93,16 +99,16 @@ export function MobileNav({ items }: { items: NavItem[] }) {
               </button>
             </div>
             <ul className="py-2">
-              {secondary.map((item) => (
-                <li key={item.href + "-m"}>
+              {SECONDARY.map((item) => (
+                <li key={item.href}>
                   <Link
                     href={item.href}
                     onClick={() => setMoreOpen(false)}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className={`block px-4 py-3 text-[13px] font-medium border-l-2 transition-colors ${
+                    className={`block px-4 py-3 text-[13px] font-medium border-l-[3px] transition-colors ${
                       isActive(item.href)
-                        ? "text-wool border-rust bg-fjord/30"
-                        : "text-fog/85 border-transparent hover:bg-fjord/20"
+                        ? "text-wool border-rust bg-white/[0.06]"
+                        : "text-fog/85 border-transparent hover:bg-white/[0.03]"
                     }`}
                   >
                     {item.label}
