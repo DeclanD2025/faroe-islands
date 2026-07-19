@@ -49,7 +49,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install
 
       - name: Build static export
         # BASE_PATH auto-derived from the repo name so the deploy URL stays
