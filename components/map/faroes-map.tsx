@@ -540,6 +540,20 @@ export default function FaroesMap({
         aria-label="Interactive expedition map of the Faroe Islands"
       />
 
+      {/* ---- Legend ---- */}
+      {loaded && (
+        <div
+          className="absolute bottom-3 left-3 z-10 flex gap-3 text-[11px]"
+          style={{ background: P.panel, color: P.text, padding: "6px 10px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.12)" }}
+          role="note"
+          aria-label="Route legend"
+        >
+          <LegendItem label="Bus" dash={[1, 0]} color={P.route} />
+          <LegendItem label="Ferry" dash={[8, 4]} color={P.route} />
+          <LegendItem label="Walk" dash={[3, 3]} color={P.route} />
+        </div>
+      )}
+
       {/* ---- Custom unified controls ---- */}
       {loaded && (
         <div
@@ -610,5 +624,23 @@ function ControlBtn({
     >
       {children}
     </button>
+  );
+}
+
+function LegendItem({ label, dash, color }: { label: string; dash: number[]; color: string }) {
+  const isSolid = dash[0] === 1 && dash[1] === 0;
+  return (
+    <div className="flex items-center gap-1.5">
+      <svg width="28" height="2" className="shrink-0" aria-hidden>
+        <line
+          x1="0" y1="1" x2="28" y2="1"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray={isSolid ? undefined : dash.join(" ")}
+        />
+      </svg>
+      <span className="text-[10px] opacity-70">{label}</span>
+    </div>
   );
 }
