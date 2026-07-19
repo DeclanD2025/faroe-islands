@@ -58,7 +58,7 @@ interface FaroesMapProps {
 // ---------------------------------------------------------------------------
 const MAP_STYLE =
   process.env.NEXT_PUBLIC_MAP_STYLE_URL ??
-  "https://tiles.openfreemap.org/styles/positron";
+  "https://tiles.openfreemap.org/styles/liberty";
 
 // Source/layer IDs
 const SOURCE_PLACES = "faroes-places";
@@ -285,6 +285,17 @@ export default function FaroesMap({
         map.addSource(SOURCE_LEGS, {
           type: "geojson",
           data: legsToGeoJSON(JOURNEY_LEGS),
+        });
+
+        // ---- 3D terrain — free DEM tiles, no API key required ----
+        map.addSource("terrain-dem", {
+          type: "raster-dem",
+          url: "https://demotiles.maplibre.org/terrain-tiles/tiles.json",
+          tileSize: 256,
+        });
+        map.setTerrain({
+          source: "terrain-dem",
+          exaggeration: 1.3,
         });
 
         // ---- Place circle layer ----
