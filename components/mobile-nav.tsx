@@ -44,7 +44,7 @@ export function MobileNav() {
         className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-navy text-wool border-t border-fog/15"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <ul className="grid grid-cols-5" style={{ gridTemplateColumns: `repeat(${PRIMARY.length}, 1fr)` }}>
+        <ul className="grid grid-cols-6">
           {PRIMARY.map((item) => (
             <li key={item.href}>
               <Link
@@ -60,17 +60,18 @@ export function MobileNav() {
               </Link>
             </li>
           ))}
+          {/* More — integrated as 6th grid column */}
+          <li>
+            <button
+              type="button"
+              onClick={() => setMoreOpen(true)}
+              aria-label="More navigation"
+              className="block w-full text-center py-3 text-[16px] text-fog/60 hover:text-wool transition-colors min-h-[48px] flex items-center justify-center"
+            >
+              ☰
+            </button>
+          </li>
         </ul>
-
-        {/* More button */}
-        <button
-          type="button"
-          onClick={() => setMoreOpen(true)}
-          aria-label="More navigation"
-          className="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center text-[20px] text-fog/60 hover:text-wool transition-colors"
-        >
-          ☰
-        </button>
       </nav>
 
       {/* More drawer */}
