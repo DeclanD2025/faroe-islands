@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
+import { Cinzel, Geist_Mono, Inter } from "next/font/google";
 import { RailNav } from "@/components/rail-nav";
+import { MobileNav } from "@/components/mobile-nav";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,8 +17,15 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 const NAV_ITEMS = [
-  { href: "/",          label: "Home" },
+  { href: "/",          label: "Now" },
   { href: "/itinerary", label: "Trip" },
   { href: "/places",    label: "Map" },
   { href: "/match-day", label: "Match" },
@@ -43,11 +51,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} h-full`}
+      className={`${inter.variable} ${geistMono.variable} ${cinzel.variable} h-full`}
     >
       <body className="min-h-full text-basalt bg-wool antialiased">
         <RailNav items={NAV_ITEMS} />
-        <main id="expedition" className="pb-24 pl-0 sm:pl-28 lg:pl-36">
+        <MobileNav items={NAV_ITEMS} />
+        <main id="expedition" className="pb-24 pl-0 sm:pt-0 sm:pl-28 lg:pl-36">
           {children}
         </main>
         <footer className="border-t border-basalt/15 mt-24 py-10 pl-0 sm:pl-28 lg:pl-36">

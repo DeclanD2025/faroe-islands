@@ -42,6 +42,7 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-norse: var(--font-cinzel), "Times New Roman", serif;
 }
 
 @layer base {
@@ -165,6 +166,14 @@
   /* Topographic line — the narrow weathered-red trace beneath the Home
      heading. Solid dashed rule, not a gradient; small dot accents add the
      weathered feel without breaking the "no gradients" rule. */
+  /* Norse display accent — used sparingly for chapter labels, codenames,
+     and field-guide mastheads. Not for body text, times, or navigation. */
+  .norse {
+    font-family: var(--font-norse);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
   .topo-line {
     height: 8px;
     position: relative;
