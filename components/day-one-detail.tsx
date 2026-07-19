@@ -336,8 +336,8 @@ export function DayOneDetail() {
             </table>
           </div>
           <p className="caption">
-            Take the <strong>13:59</strong>. Arrives Haymarket 15:02, tram to EDI ~15:30. Leaves 1h 40m before the gate closes. 
-            Book on the ScotRail app or buy at Bellshill ticket machine. Off-peak return ~£18.
+            <strong>11:59</strong> is the safest pick — Haymarket 13:02, EDI by ~13:30, bags of time. 
+            <strong>12:59</strong> works too if you want another hour at home. Off-peak return ~£18. ScotRail app or Bellshill machine.
           </p>
 
           {/* ——— 3. EDI Departure Board + Pubs ——— */}
