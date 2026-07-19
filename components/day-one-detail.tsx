@@ -86,11 +86,85 @@ const TIMELINE_STEPS = [
     num: 6,
     icon: "✈",
     title: "Edinburgh Airport",
-    subtitle: "Domestic Departures",
+    subtitle: "Domestic Departures · gates 7–10",
     middleLabel: "Arrive by",
     middleValue: "~10:40",
     rightLabel: "Contingency",
     rightValue: "~6h 30m",
+    footer: "All Bar One, Wetherspoons, Pret — plenty of options airside. Flight boards near the international gates.",
+  },
+  {
+    num: 7,
+    icon: "✈",
+    title: "Atlantic Airways RC 415",
+    subtitle: "Edinburgh → Vágar · Airbus A320neo",
+    middleLabel: "Departs",
+    middleValue: "17:10 BST",
+    middleLabel2: "Lands",
+    middleValue2: "18:35 WEST",
+    rightLabel: "Flight",
+    rightValue: "1h 25m",
+    footer: "Forth bridges 3 min after takeoff. Cairngorms to the right. North Sea crossing. RNP approach between fjord walls into Sørvágur.",
+  },
+  {
+    num: 8,
+    icon: "⌂",
+    title: "Vágar Airport",
+    subtitle: "Sørvágur, Vágar island · single terminal",
+    middleLabel: "Arrive",
+    middleValue: "18:35",
+    rightLabel: "Onward",
+    rightValue: "Bus 300",
+    footer: "Walk across tarmac. Passport stamp on request. Arrivals duty-free open. No SIM vendor — buy eSIM before departure. Bus stop 50 m from the terminal exit.",
+  },
+  {
+    num: 9,
+    icon: "⏻",
+    title: "Bus 300",
+    subtitle: "Vágar Airport → Tórshavn · via Vágatunnilin",
+    middleLabel: "Departs",
+    middleValue: "~19:00",
+    middleLabel2: "Arrives",
+    middleValue2: "~19:45",
+    rightLabel: "Journey",
+    rightValue: "~45 min",
+    footer: "Meets RC 415. DKK 90 pp or 7-day SSL Travel Card. Bus terminates at Tórshavn bus station. Walk or taxi to the ferry terminal — Farstøðin is at the harbour.",
+  },
+  {
+    num: 10,
+    icon: "⇄",
+    title: "Tórshavn",
+    subtitle: "Bus station → Farstøðin ferry terminal · ~10 min walk",
+    middleLabel: "Arrive",
+    middleValue: "~19:45",
+    rightLabel: "Ferry",
+    rightValue: "21:15",
+    footer: "1h 30m before the Smyril sails. Grab food near the harbour — the ferry café also serves hot food, beer, and coffee onboard.",
+  },
+  {
+    num: 11,
+    icon: "⏻",
+    title: "M/F Smyril · Route 7",
+    subtitle: "Tórshavn → Krambatangi · Suðuroy",
+    middleLabel: "Departs",
+    middleValue: "21:15",
+    middleLabel2: "Arrives",
+    middleValue2: "23:20",
+    rightLabel: "Crossing",
+    rightValue: "2h 05m",
+    footer: "Last sailing of the day. Book at ssl.fo before travel. Gate closes 5 min before departure. Café, indoor seating, outdoor deck, free Wi-Fi onboard. Dark, exposed pier at Krambatangi — bring a layer.",
+    footerLink: { label: "Book at ssl.fo →", href: "https://booking.ssl.fo" },
+  },
+  {
+    num: 12,
+    icon: "⌂",
+    title: "Øravík AirBnB",
+    subtitle: "Við á 7, Øravík 827 · 2 km from Krambatangi",
+    middleLabel: "Arrive",
+    middleValue: "~23:30",
+    rightLabel: "Transfer",
+    rightValue: "Bus 700",
+    footer: "Bus 700 two stops from Krambatangi (Ferjuleðan) · ~8 min · DKK 20. Or pre-book taxi +298 239550 (~DKK 150). Self check-in — lockbox code saved offline. Still twilight at midnight — eye mask essential.",
   },
 ];
 
@@ -106,11 +180,11 @@ const TRAIN_OPTIONS = {
 };
 
 const SUMMARY_ITEMS = [
-  { icon: "⌂", label: "Leave home by", time: "08:30", note: "Bellshill" },
-  { icon: "⏻", label: "Take the train", time: "08:59", note: "ScotRail" },
-  { icon: "✈", label: "Airport arrival", time: "~10:40", note: "Edinburgh" },
-  { icon: "◷", label: "Contingency", time: "~6h 30m", note: "before flight" },
-  { icon: "✈", label: "Flight departs", time: "17:10", note: "Edinburgh Airport" },
+  { icon: "⌂", label: "Leave home", time: "08:30", note: "Bellshill" },
+  { icon: "✈", label: "Flight", time: "EDI 17:10", note: "RC 415" },
+  { icon: "⌂", label: "Land", time: "FAE 18:35", note: "Vágar" },
+  { icon: "⏻", label: "Ferry", time: "21:15", note: "M/F Smyril" },
+  { icon: "⌂", label: "Arrive", time: "~23:30", note: "Øravík" },
 ];
 
 // =============================================================================
@@ -478,17 +552,17 @@ function MobileDecisionPanel() {
       <p className="text-[10px] uppercase tracking-[0.12em] text-fjord/60">Leave home by</p>
       <p className="code tnum text-[36px] font-medium text-basalt leading-none mt-1">08:30</p>
       <p className="text-[13px] text-basalt/65 mt-2">
-        Take the <strong>08:59</strong> train from Bellshill.
-        Expected airport arrival around <strong>10:40</strong>.
+        Take the <strong>08:59</strong> from Bellshill. Flight <strong>EDI 17:10</strong>.
+        Ferry <strong>21:15</strong> from Tórshavn. Arrive Øravík <strong>~23:30</strong>.
       </p>
       <div className="flex gap-6 mt-3 pt-3 border-t border-basalt/10">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.1em] text-basalt/45">Contingency</p>
-          <p className="code tnum text-[15px] font-medium text-basalt">~6h 30m</p>
-        </div>
-        <div>
           <p className="text-[10px] uppercase tracking-[0.1em] text-basalt/45">Flight</p>
           <p className="code tnum text-[15px] font-medium text-basalt">17:10</p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.1em] text-basalt/45">Arrive</p>
+          <p className="code tnum text-[15px] font-medium text-basalt">~23:30</p>
         </div>
       </div>
     </div>
@@ -605,10 +679,9 @@ export function DayOneDetail() {
             >
               The journey north
             </h1>
-            <p className="text-[20px] font-medium text-basalt/80 mt-2">Getting to Edinburgh Airport</p>
+            <p className="text-[20px] font-medium text-basalt/80 mt-2">Bellshill → Edinburgh → Vágar → Øravík</p>
             <p className="text-[14px] text-basalt/60 mt-2 max-w-[38rem]">
-              Your journey from home to Edinburgh Airport on 27 July 2026.
-              Leave with time to spare. Enjoy the day.
+              One flight, one bus, one ferry, one short hop. ~15 hours door to door across Scotland and the North Atlantic.
             </p>
           </div>
 
@@ -656,9 +729,9 @@ export function DayOneDetail() {
           >
             The journey north
           </h1>
-          <p className="text-[17px] font-medium text-basalt/80 mt-1.5">Getting to Edinburgh Airport</p>
+          <p className="text-[17px] font-medium text-basalt/80 mt-1.5">Bellshill → Edinburgh → Vágar → Øravík</p>
           <p className="text-[14px] text-basalt/60 mt-2">
-            Your journey from home to Edinburgh Airport on 27 July 2026.
+            One flight, one bus, one ferry, one short hop. ~15 hours door to door.
           </p>
         </div>
 
