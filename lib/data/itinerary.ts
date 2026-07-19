@@ -10,8 +10,8 @@ export type ISODate = string;              // e.g. "2026-07-27"
 
 export const TRIP = {
   week: "FAROE ISLANDS",
-  dates: "28 Jul — 1 Aug 2026",
-  iso: { start: "2026-07-28", end: "2026-08-01" } as const,
+  dates: "27 Jul — 1 Aug 2026",
+  iso: { start: "2026-07-27", end: "2026-08-01" } as const,
   // The countdown target. The hook reads this on the client; the prerendered
   // HTML carries no countdown so hydration cannot mismatch.
   countdownTarget: "2026-07-27T17:00:00Z" as const,

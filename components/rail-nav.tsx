@@ -20,10 +20,10 @@ const NAV_SECTIONS: NavSection[] = [
     group: "ITINERARY",
     items: [
       { href: "/day/1", label: "Day 1", subtitle: "The journey north" },
-      { href: "/day/2", label: "Day 2", subtitle: "Tórshavn & Ólavsøka" },
-      { href: "/day/3", label: "Day 3", subtitle: "Runavík" },
-      { href: "/day/4", label: "Day 4", subtitle: "Matchday" },
-      { href: "/day/5", label: "Day 5", subtitle: "Northern islands" },
+      { href: "/day/2", label: "Day 2", subtitle: "The cliffs of Suðuroy" },
+      { href: "/day/3", label: "Day 3", subtitle: "Matchday" },
+      { href: "/day/4", label: "Day 4", subtitle: "Repositioning north" },
+      { href: "/day/5", label: "Day 5", subtitle: "Homeward" },
     ],
   },
   {
