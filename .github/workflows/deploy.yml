@@ -58,6 +58,7 @@ jobs:
         run: pnpm exec next build
         env:
           BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_MAP_STYLE_URL: https://tiles.openfreemap.org/styles/positron
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
