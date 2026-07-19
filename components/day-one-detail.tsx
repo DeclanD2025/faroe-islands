@@ -11,6 +11,8 @@ import dynamic from "next/dynamic";
 import type maplibregl from "maplibre-gl";
 import type { SelectedFeature } from "@/components/map/faroes-map";
 import { LiveBoard, type LiveRow } from "@/components/live-board";
+import { getEdiDeparturesUrl, transformEdiDepartures } from "@/lib/aviationstack";
+import { getBlhDeparturesUrl, transformBlhDepartures } from "@/lib/transportapi";
 import {
   HOME_TO_AIRPORT,
   SCOTRAIL_DEPARTURES,
@@ -108,52 +110,41 @@ function LiveClock() {
 }
 
 // =============================================================================
-// Widget: Countdown to EDI departure
+// Widget: Countdown to train departure (11:59 Bellshill)
 // =============================================================================
-function DepartureCountdown() {
-  const [remaining, setRemaining] = useState<{ d: number; h: number; m: number; s: number; past: boolean }>({
-    d: 0, h: 0, m: 0, s: 0, past: false,
-  });
+function TrainCountdown() {
+  const [remaining, setRemaining] = useState<{ h: number; m: number; past: boolean }>({ h: 0, m: 0, past: false });
 
   useEffect(() => {
-    const target = new Date("2026-07-27T16:10:00Z").getTime(); // 17:10 BST = 16:10 UTC
+    const target = new Date("2026-07-27T10:59:00Z").getTime(); // 11:59 BST = 10:59 UTC
     const tick = () => {
       const diff = target - Date.now();
       if (diff <= 0) {
-        setRemaining({ d: 0, h: 0, m: 0, s: 0, past: true });
+        setRemaining({ h: 0, m: 0, past: true });
         return;
       }
       setRemaining({
         past: false,
-        d: Math.floor(diff / 86_400_000),
-        h: Math.floor((diff % 86_400_000) / 3_600_000),
+        h: Math.floor(diff / 3_600_000),
         m: Math.floor((diff % 3_600_000) / 60_000),
-        s: Math.floor((diff % 60_000) / 1000),
       });
     };
     tick();
-    const id = setInterval(tick, 1000);
+    const id = setInterval(tick, 60_000); // update every minute
     return () => clearInterval(id);
   }, []);
 
-  const pad = (n: number) => String(n).padStart(2, "0");
-
   return (
-    <div className="border border-basalt/15 p-3">
-      <p className="text-[10px] uppercase tracking-[0.12em] text-rust/70 mb-1">Departure countdown</p>
+    <div className="border border-basalt/15 p-3 inline-block">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-rust/70 mb-1">Train countdown</p>
       {remaining.past ? (
-        <p className="code text-rust tnum text-[16px] font-medium">In the air</p>
+        <p className="code text-rust tnum text-[16px] font-medium">Departed</p>
       ) : (
-        <div>
-          <p className="code text-basalt tnum text-[22px] font-medium leading-none">
-            {remaining.d > 0 && <>{remaining.d}<span className="text-[14px] text-fjord/60 ml-0.5">d</span>{" "}</>}
-            {pad(remaining.h)}<span className="text-[14px] text-fjord/60 ml-0.5">h</span>{" "}
-            {pad(remaining.m)}<span className="text-[14px] text-fjord/60 ml-0.5">m</span>{" "}
-            {pad(remaining.s)}<span className="text-[14px] text-fjord/60 ml-0.5">s</span>
-          </p>
-        </div>
+        <p className="code text-basalt tnum text-[22px] font-medium leading-none">
+          {remaining.h}h {remaining.m}m
+        </p>
       )}
-      <p className="text-[11px] text-fjord/50 mt-0.5">EDI 17:10 BST · 27 Jul 2026</p>
+      <p className="text-[11px] text-fjord/50 mt-0.5">until 11:59 Bellshill</p>
     </div>
   );
 }
@@ -199,7 +190,7 @@ function WeatherWidget() {
     const fetchWeather = async () => {
       try {
         const res = await fetch(
-          "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=62.0097&lon=-6.7716",
+          "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=62.0636&lon=-7.2772",
           { headers: { "User-Agent": "faroe-islands-expedition-log/1.0 github.com/DeclanD2025" } }
         );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -229,7 +220,7 @@ function WeatherWidget() {
 
   return (
     <div className="border border-basalt/15 p-3">
-      <p className="text-[10px] uppercase tracking-[0.12em] text-fjord/60 mb-2">Tórshavn · yr.no</p>
+      <p className="text-[10px] uppercase tracking-[0.12em] text-fjord/60 mb-2">Vágar Airport · yr.no</p>
       {w.loading ? (
         <p className="caption">Loading weather…</p>
       ) : w.error ? (
@@ -319,6 +310,8 @@ export function DayOneDetail() {
           <div className="mb-4">
             <LiveBoard
               title="Departures"
+              fetchUrl={getBlhDeparturesUrl() ?? undefined}
+              transform={transformBlhDepartures}
               sourceUrl="https://www.scotrail.co.uk/plan-your-journey"
               sourceLabel="ScotRail live"
               columns={[
@@ -336,6 +329,10 @@ export function DayOneDetail() {
             <strong>12:59</strong> works too if you want another hour at home. Off-peak return ~£18. ScotRail app or Bellshill machine.
           </p>
 
+          <div className="mt-4">
+            <TrainCountdown />
+          </div>
+
           {/* ——— Route Map ——— */}
           <div className="mt-8 mb-8">
             <p className="label mb-2">Route map</p>
@@ -349,6 +346,8 @@ export function DayOneDetail() {
           <div className="mb-3">
             <LiveBoard
               title="Departures"
+              fetchUrl={getEdiDeparturesUrl() ?? undefined}
+              transform={transformEdiDepartures}
               sourceUrl="https://www.edinburghairport.com/flights/departures"
               sourceLabel="EDI live departures"
               columns={[
@@ -552,7 +551,6 @@ export function DayOneDetail() {
         <aside className="space-y-4">
           {/* Live widgets */}
           <LiveClock />
-          <DepartureCountdown />
           <WeatherWidget />
 
           <div className="space-y-6">
