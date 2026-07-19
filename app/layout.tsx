@@ -25,13 +25,16 @@ const cinzel = Cinzel({
 });
 
 const NAV_ITEMS = [
-  { href: "/",          label: "Now" },
-  { href: "/itinerary", label: "Trip" },
+  { href: "/day/1",     label: "Day 1" },
+  { href: "/day/2",     label: "Day 2" },
+  { href: "/day/3",     label: "Day 3" },
+  { href: "/day/4",     label: "Day 4" },
+  { href: "/day/5",     label: "Day 5" },
   { href: "/places",    label: "Map" },
   { href: "/explore",   label: "Explore" },
+  { href: "/hikes",     label: "Hikes" },
   { href: "/match-day", label: "Match" },
   { href: "/packing",   label: "Prepare" },
-  { href: "/hikes",     label: "Hikes" },
 ];
 
 export const metadata: Metadata = {
