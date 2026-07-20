@@ -213,9 +213,11 @@ export function DepartureCountdown() {
         className="text-[64px] font-bold text-rust leading-none"
         style={{ fontFamily: "var(--font-cinzel)" }}
       >
-        {days ?? "—"}
+        {days === null ? "—" : days <= 0 ? "0" : days}
       </p>
-      <p className="text-[13px] text-basalt/70 mt-1">days until departure</p>
+      <p className="text-[13px] text-basalt/70 mt-1">
+        {days === null ? "" : days <= 0 ? "We're here" : days === 1 ? "day until departure" : "days until departure"}
+      </p>
     </>
   );
 }
@@ -251,7 +253,7 @@ export function TripStatusPanel({
         <WeatherBlock lat={weatherLat} lon={weatherLon} label={weatherLabel} />
       </div>
       <p className="text-[10px] text-basalt/35 mt-3">
-        Updated 19 Jul, 10:30 · yr.no
+        Weather from yr.no · live data
       </p>
     </div>
   );

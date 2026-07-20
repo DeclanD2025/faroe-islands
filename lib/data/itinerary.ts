@@ -47,7 +47,9 @@ export const BOOKINGS = {
     nights: 1,
     address: "2 Bakkavegur, 380 Sørvágur",
     confirmation: "5924180270",
-    pin: "9432",
+    // PIN concealed — never rendered in plain text on public pages.
+    // Check your booking confirmation email for the access code.
+    pin: "● ● ● ●",
     phone: "+298 232101",
   },
   flights: {
