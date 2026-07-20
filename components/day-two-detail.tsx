@@ -75,7 +75,7 @@ export function DayTwoDetail() {
       <article className="hidden lg:grid grid-cols-[1fr_340px] gap-8 px-8 pt-8 pb-20 max-w-[1280px]">
         <div className="min-w-0">
           <div className="mb-8">
-            <p className="text-[12px] tracking-[0.14em] uppercase text-rust font-medium">Day 2 · Wednesday · 29 July 2026</p>
+            <p className="text-[12px] tracking-[0.14em] uppercase text-rust font-medium">Day 2 · Tuesday · 28 July 2026</p>
             <h1 className="text-[clamp(2.5rem,3.5vw,3.2rem)] leading-[1.04] mt-1.5 text-basalt tracking-[-0.01em]" style={{ fontFamily: "var(--font-cinzel)" }}>The cliffs of Suðuroy</h1>
             <p className="text-[20px] font-medium text-basalt/80 mt-2">Øravík · Hov · Beinisvørð · Tvøroyri</p>
             <p className="text-[14px] text-basalt/60 mt-2 max-w-[38rem]">A whole Suðuroy day. Beinisvørð on the way south, a pint at Hotel Tvøroyri, and the twilight worth losing sleep for. Thursday is the match — today is the breathing room.</p>
@@ -86,7 +86,7 @@ export function DayTwoDetail() {
         </div>
         <aside className="min-w-0">
           <div className="space-y-8">
-            <TripStatusPanel dateLine1="Wednesday 29 July 2026" dateLine2="Suðuroy exploration day" weatherLat={61.536} weatherLon={-6.81} weatherLabel="Øravík" />
+            <TripStatusPanel dateLine1="Tuesday 28 July 2026" dateLine2="Suðuroy exploration day" weatherLat={61.536} weatherLon={-6.81} weatherLabel="Øravík" />
             <div><p className="text-[10px] uppercase tracking-[0.16em] text-fjord/60 mb-2">SUÐUROY · FAROE ISLANDS</p><div style={{ minHeight: 500 }}><FaroesMap onSelect={() => {}} selected={null} filter="suðuroy" mapRef={mapRef} /></div></div>
           </div>
         </aside>
@@ -94,9 +94,9 @@ export function DayTwoDetail() {
 
       {/* MOBILE */}
       <article className="lg:hidden px-4 pt-6 pb-24 max-w-[640px] mx-auto">
-        <div className="mb-6"><p className="text-[11px] tracking-[0.14em] uppercase text-rust font-medium">Day 2 · Wednesday · 29 July</p><h1 className="text-[clamp(2rem,8vw,2.6rem)] leading-[1.06] mt-1 text-basalt tracking-[-0.01em]" style={{ fontFamily: "var(--font-cinzel)" }}>The cliffs of Suðuroy</h1><p className="text-[17px] font-medium text-basalt/80 mt-1.5">Øravík · Hov · Beinisvørð · Tvøroyri</p><p className="text-[14px] text-basalt/60 mt-2">A whole Suðuroy day. Beinisvørð, Hvannhagi ridge walk, and a pint at Hotel Tvøroyri.</p></div>
+        <div className="mb-6">            <p className="text-[11px] tracking-[0.14em] uppercase text-rust font-medium">Day 2 · Tuesday · 28 July</p><h1 className="text-[clamp(2rem,8vw,2.6rem)] leading-[1.06] mt-1 text-basalt tracking-[-0.01em]" style={{ fontFamily: "var(--font-cinzel)" }}>The cliffs of Suðuroy</h1><p className="text-[17px] font-medium text-basalt/80 mt-1.5">Øravík · Hov · Beinisvørð · Tvøroyri</p><p className="text-[14px] text-basalt/60 mt-2">A whole Suðuroy day. Beinisvørð, Hvannhagi ridge walk, and a pint at Hotel Tvøroyri.</p></div>
         <section className="mb-6"><MobileDecisionPanel /></section>
-        <section className="mb-8"><MobileTripStatus dateLine1="Wednesday 29 July 2026" dateLine2="Suðuroy exploration day" weatherLat={61.536} weatherLon={-6.81} weatherLabel="Øravík" /></section>
+        <section className="mb-8"><MobileTripStatus dateLine1="Tuesday 28 July 2026" dateLine2="Suðuroy exploration day" weatherLat={61.536} weatherLon={-6.81} weatherLabel="Øravík" /></section>
         <section className="mb-8"><p className="text-[10px] uppercase tracking-[0.16em] text-fjord/60 mb-3">Day plan</p><MobileTimeline steps={DAY_TWO_TIMELINE} /></section>
         <section className="mb-8"><div className="harbour-notice"><p className="text-[10px] uppercase tracking-[0.14em] text-rust font-medium mb-1">Could disrupt the day</p><p className="text-[14px]">Coastal fog. If the cliffs are in cloud, swap Beinisvørð for Hvannhagi — the markers vanish in fog.</p></div></section>
         <section><p className="text-[10px] uppercase tracking-[0.16em] text-fjord/60 mb-2">SUÐUROY · FAROE ISLANDS</p><div style={{ minHeight: 420 }}><FaroesMap onSelect={() => {}} selected={null} filter="journey" mapRef={mapRef} /></div></section>

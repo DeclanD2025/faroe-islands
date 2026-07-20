@@ -61,6 +61,8 @@ export const BOOKINGS = {
 // Six bespoke day chapters. Each day is its own object because the editorial
 // brief explicitly forbids six identical cards. We compose the layout from
 // fields, not from a generic component — the page reads these as JSX.
+// Day 1 (Mon 27 Jul) · Day 2 (Tue 28 Jul) · Day 3 (Wed 29 Jul) ·
+// Day 4 (Thu 30 Jul · match) · Day 5 (Fri 31 Jul) · Day 6 (Sat 1 Aug).
 // -----------------------------------------------------------------------------
 
 export type DayStage =
@@ -89,10 +91,10 @@ export interface DayPlan {
 export const DAYS: DayPlan[] = [
   {
     num: "01",
-    date: "Tue 28 Jul",
-    weekday: "Tuesday",
-    iso: "2026-07-28",
-    chapter: "Onto the ferry",
+    date: "Mon 27 Jul",
+    weekday: "Monday",
+    iso: "2026-07-27",
+    chapter: "The journey north",
     location: "Edinburgh · Vágar · Tórshavn · Øravík",
     narrative:
       "An Atlantic Airways afternoon crossing, a forty-five minute bus to the capital, then the last boat of the day slipping south through the Suðuroyarfjørður. Arrival in Øravík well after midnight.",
@@ -111,9 +113,9 @@ export const DAYS: DayPlan[] = [
   },
   {
     num: "02",
-    date: "Wed 29 Jul",
-    weekday: "Wednesday",
-    iso: "2026-07-29",
+    date: "Tue 28 Jul",
+    weekday: "Tuesday",
+    iso: "2026-07-28",
     chapter: "The cliffs of Suðuroy",
     location: "Øravík · Tvøroyri · Akraberg",
     narrative:
@@ -132,6 +134,28 @@ export const DAYS: DayPlan[] = [
   },
   {
     num: "03",
+    date: "Wed 29 Jul",
+    weekday: "Wednesday",
+    iso: "2026-07-29",
+    chapter: "A free day on Suðuroy",
+    location: "Øravík · Hov · Froðba",
+    narrative:
+      "No fixed plan, no ferry to catch. A slow morning, a walk that doesn't have to go anywhere, and the island at its own pace. The match is tomorrow — today is for doing very little, well.",
+    stages: [
+      { kind: "anchor", time: "~09:00", title: "Slow start · breakfast at Við á 7", detail: "ESLA supplies, coffee, the weather window." },
+      { kind: "anchor", time: "11:00", title: "Fámjin or Froðba — pick one", detail: "Bus 701 to the flag church at Fámjin, or an easy coastal walk to Froðba's basalt columns." },
+      { kind: "anchor", time: "~15:00", title: "Café MorMor · late lunch", detail: "Open Wed–Fri 12–18:00. The island gem — soup and cake." },
+      { kind: "anchor", time: "Evening", title: "Self-cater or Hotel Tvøroyri", detail: "No schedule. Pack and prep for tomorrow's matchday ferry." },
+    ],
+    couldDisrupt: "Rain. A free day is the cheapest day to lose to weather — ESLA, the guesthouse, and a book are the plan.",
+    composition: "quiet-closing",
+    heroCue: {
+      caption: "Fámjin — where the Faroese flag was first raised.",
+      alt: "A small white-walled church under a low hill, quiet in soft Atlantic light.",
+    },
+  },
+  {
+    num: "04",
     date: "Thu 30 Jul",
     weekday: "Thursday",
     iso: "2026-07-30",
@@ -154,7 +178,7 @@ export const DAYS: DayPlan[] = [
     },
   },
   {
-    num: "04",
+    num: "05",
     date: "Fri 31 Jul",
     weekday: "Friday",
     iso: "2026-07-31",
@@ -174,7 +198,7 @@ export const DAYS: DayPlan[] = [
       alt: "Two red-roofed timber houses facing a still fjord at late evening.",
     },
   },  {
-    num: "05",
+    num: "06",
     date: "Sat 1 Aug",
     weekday: "Saturday",
     iso: "2026-08-01",

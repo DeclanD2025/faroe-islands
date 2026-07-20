@@ -1,5 +1,5 @@
 // =============================================================================
-// Day widgets — shared components used across all 5 day pages.
+// Day widgets — shared components used across all 6 day pages.
 // Extracted to eliminate ~400 lines of duplication.
 // =============================================================================
 

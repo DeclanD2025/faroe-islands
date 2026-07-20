@@ -18,6 +18,7 @@ const PRIMARY: NavItem[] = [
   { href: "/day/3", label: "Day 3" },
   { href: "/day/4", label: "Day 4" },
   { href: "/day/5", label: "Day 5" },
+  { href: "/day/6", label: "Day 6" },
 ];
 
 const SECONDARY: NavItem[] = [
@@ -44,7 +45,7 @@ export function MobileNav() {
         className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-navy text-wool border-t border-fog/15"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <ul className="grid grid-cols-6">
+        <ul className="grid grid-cols-7">
           {PRIMARY.map((item) => (
             <li key={item.href}>
               <Link

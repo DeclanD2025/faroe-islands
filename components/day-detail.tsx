@@ -16,6 +16,7 @@ import { DayTwoDetail } from "@/components/day-two-detail";
 import { DayThreeDetail } from "@/components/day-three-detail";
 import { DayFourDetail } from "@/components/day-four-detail";
 import { DayFiveDetail } from "@/components/day-five-detail";
+import { DaySixDetail } from "@/components/day-six-detail";
 
 const FaroesMap = dynamic(() => import("@/components/map/faroes-map"), {
   ssr: false,
@@ -109,12 +110,14 @@ export function DayDetail({ num: rawNum }: { num: string }) {
 
   const dayNum = parseInt(day.num, 10);
 
-  // Day 1 gets the full operational brief, Day 2 gets the Suðuroy exploration
+  // Day 1 gets the full operational brief, Day 2 the Suðuroy cliffs, Day 3 a free day,
+  // Day 4 the match, Day 5 the repositioning, Day 6 the homeward run.
   if (dayNum === 1) return <DayOneDetail />;
   if (dayNum === 2) return <DayTwoDetail />;
   if (dayNum === 3) return <DayThreeDetail />;
   if (dayNum === 4) return <DayFourDetail />;
   if (dayNum === 5) return <DayFiveDetail />;
+  if (dayNum === 6) return <DaySixDetail />;
 
   return (
     <article className="px-6 sm:px-8 lg:px-12 pt-8 sm:pt-10 pb-20 max-w-[72rem]">
@@ -162,9 +165,9 @@ export function DayDetail({ num: rawNum }: { num: string }) {
       </section>
 
       {/* ============================================================
-          Match day link (Day 3 only)
+          Match day link (Day 4 only)
           ============================================================ */}
-      {dayNum === 3 && (
+      {dayNum === 4 && (
         <section className="mt-8 max-w-[48rem]">
           <Link
             href="/match-day"
@@ -190,7 +193,7 @@ export function DayDetail({ num: rawNum }: { num: string }) {
           ) : (
             <span />
           )}
-          {dayNum < 5 ? (
+          {dayNum < 6 ? (
             <Link
               href={`/day/${dayNum + 1}`}
               className="code text-[13px] underline underline-offset-4 decoration-basalt/30 hover:text-rust transition-colors"
