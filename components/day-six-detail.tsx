@@ -46,7 +46,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
 ];
 
 // =============================================================================
-// Coach alternatives (Day 5 specific)
+// Coach alternatives (Day 6 specific)
 // =============================================================================
 
 const COACH_OPTIONS = {
@@ -73,7 +73,7 @@ const SUMMARY_ITEMS: SummaryItem[] = [
 ];
 
 // =============================================================================
-// Coach Alternatives section (Day 5 specific)
+// Coach Alternatives section (Day 6 specific)
 // =============================================================================
 
 function CoachAlternatives() {
