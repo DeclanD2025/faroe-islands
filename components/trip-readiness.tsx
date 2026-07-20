@@ -6,7 +6,7 @@
 
 "use client";
 
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { TRIP } from "@/lib/data/itinerary";
 
 const TRIP_START = new Date("2026-07-27T00:00:00Z");
@@ -35,7 +35,16 @@ function getTripDay(now: Date): { dayNum: number | null; label: string; totalDay
 }
 
 export function TripReadiness() {
-  const { dayNum, label } = useMemo(() => getTripDay(new Date()), []);
+  const [tripDay, setTripDay] = useState(() => getTripDay(new Date()));
+
+  useEffect(() => {
+    const tick = () => setTripDay(getTripDay(new Date()));
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const { dayNum, label } = tripDay;
 
   return (
     <div className="border border-basalt/15 rounded-[8px] p-4 bg-basalt/[0.01]">

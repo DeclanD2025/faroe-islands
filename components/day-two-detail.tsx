@@ -13,7 +13,7 @@ import { TripReadiness } from "@/components/trip-readiness";
 import { DecisionTreeView } from "@/components/decision-tree";
 import { SourceRegister } from "@/components/source-register";
 import { DAY2_DECISION } from "@/lib/data/decision-trees";
-import { provisional, verified, unverified } from "@/lib/data/sources";
+import { provisional, verified } from "@/lib/data/sources";
 import { SOURCE_LIBRARY } from "@/lib/data/sources";
 import {
   type TimelineStep,

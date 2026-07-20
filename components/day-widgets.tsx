@@ -311,7 +311,7 @@ function CountdownValue() {
     const id = setInterval(calc, 60_000);
     return () => clearInterval(id);
   }, []);
-  return <>{days ?? "8"}</>;
+  return <>{days ?? "—"}</>;
 }
 
 // =============================================================================

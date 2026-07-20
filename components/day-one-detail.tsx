@@ -13,7 +13,7 @@ import { TripReadiness } from "@/components/trip-readiness";
 import { ConnectionChain } from "@/components/connection-chain";
 import { SourceRegister } from "@/components/source-register";
 import { CONNECTION_CHAINS } from "@/lib/data/transport-matrices";
-import { provisional, verified } from "@/lib/data/sources";
+import { provisional } from "@/lib/data/sources";
 import { SOURCE_LIBRARY } from "@/lib/data/sources";
 import {
   type TimelineStep,

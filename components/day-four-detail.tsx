@@ -297,6 +297,61 @@ function ContactLine({ label, value }: { label: string; value: string }) {
 }
 
 // =============================================================================
+// Mobile Ferry Scenarios (collapsed accordion)
+// =============================================================================
+
+function MobileFerryScenarios() {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="border border-rust/20 bg-rust/[0.02] rounded-[8px]">
+      <button
+        type="button"
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-4 text-left"
+        aria-expanded={expanded}
+      >
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.12em] text-rust font-medium">
+            ⚠ Last boat: 21:15
+          </p>
+          <p className="text-[12px] text-basalt/70 mt-1">
+            Miss this and we sleep in Tórshavn. Stadium to terminal: ~1 km, 15–20 min walk.
+          </p>
+        </div>
+        <span className="text-[14px] text-basalt/40 shrink-0 ml-3">
+          {expanded ? "▲" : "▼"}
+        </span>
+      </button>
+      {expanded && (
+        <div className="px-4 pb-4 space-y-1.5">
+          {FERRY_SCENARIOS.map((s) => (
+            <div key={s.id} className="border border-basalt/10 rounded-[6px] p-2.5 text-[11px]">
+              <div className="flex items-baseline justify-between mb-1">
+                <span className={`font-medium ${
+                  s.risk === "critical" ? "text-rust" :
+                  s.risk === "high" ? "text-yellow" :
+                  "text-basalt"
+                }`}>{s.title}</span>
+                <span className={`text-[9px] uppercase tracking-[0.08em] ${
+                  s.risk === "critical" ? "text-rust" :
+                  s.risk === "high" ? "text-yellow" :
+                  "text-fjord/60"
+                }`}>{s.risk} risk</span>
+              </div>
+              <p className="text-basalt/60">{s.action}</p>
+            </div>
+          ))}
+          <div className="pt-2 mt-2 border-t border-basalt/10">
+            <p className="text-[10px] uppercase tracking-[0.1em] text-rust/70 mb-1">Emergency contacts</p>
+            <p className="text-[11px] text-basalt/60">Taxi: +298 313131 · Hotel Hafnia: +298 313233 · Hotel Føroyar: +298 317500</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
 // Mobile
 // =============================================================================
 
@@ -483,13 +538,7 @@ export function DayFourDetail() {
         <section className="mb-6"><MobileTripStatus dateLine1="Thursday 30 July 2026" dateLine2="Matchday · HB Tórshavn v Motherwell" weatherLat={62.0097} weatherLon={-6.7716} weatherLabel="Tórshavn" /></section>
         <section className="mb-6"><p className="text-[10px] uppercase tracking-[0.16em] text-fjord/60 mb-2">Matchday timeline</p><MobileTimeline steps={DAY_FOUR_TIMELINE} /></section>
         <section className="mb-6"><DecisionTreeView tree={DAY4_DECISION} /></section>
-        <section className="mb-6">
-          <div className="border border-rust/20 bg-rust/[0.02] rounded-[8px] p-4">
-            <p className="text-[11px] uppercase tracking-[0.12em] text-rust font-medium mb-2">⚠ Last boat: 21:15</p>
-            <p className="text-[13px] text-basalt/70">Miss this and we sleep in Tórshavn. Stadium to terminal: ~1 km, 15–20 min walk. Normal full-time gives ~1h buffer.</p>
-            <p className="text-[11px] text-basalt/50 mt-2">Emergency: Hotel Hafnia +298 313233 · Taxi +298 313131</p>
-          </div>
-        </section>
+        <section className="mb-6"><MobileFerryScenarios /></section>
         <section><p className="text-[10px] uppercase tracking-[0.16em] text-fjord/60 mb-2">TÓRSHAVN · MATCHDAY</p><div style={{ minHeight: 420 }}><FaroesMap onSelect={() => {}} selected={null} filter="match" mapRef={mapRef} /></div></section>
       </article>
     </>
