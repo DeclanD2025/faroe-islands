@@ -152,11 +152,11 @@ const DAY_TWO_TIMELINE: TimelineStep[] = [
 ];
 
 const DAY_TWO_SUMMARY: SummaryItem[] = [
-  { icon: "🏃", label: "Run", time: "20–35 min", note: "Øravík loop" },
-  { icon: "⏻", label: "Bus route", time: "700", note: "Coastal spine" },
-  { icon: "▲", label: "Primary hike", time: "2–3 hrs", note: "Hvannhagi" },
-  { icon: "⏱", label: "Walking total", time: "~3–4 hrs", note: "~8–10 km" },
-  { icon: "🍽", label: "Dinner", time: "~17:00", note: "Hotel Tvøroyri" },
+  { icon: "R", label: "Run", time: "20–35 min", note: "Øravík loop" },
+  { icon: "Bs", label: "Bus route", time: "700", note: "Coastal spine" },
+  { icon: "Hk", label: "Primary hike", time: "2–3 hrs", note: "Hvannhagi" },
+  { icon: "Wk", label: "Walking total", time: "~3–4 hrs", note: "~8–10 km" },
+  { icon: "Dn", label: "Dinner", time: "~17:00", note: "Hotel Tvøroyri" },
 ];
 
 // =============================================================================
@@ -281,7 +281,7 @@ export function DayTwoDetail() {
                   <RunDetail label="Wind" value={RUN_PLAN.wind} />
                 </div>
                 <p className="text-[12px] text-basalt/55 mt-3">{RUN_PLAN.route}</p>
-                <p className="text-[11px] text-rust/70 mt-2">⚠ {RUN_PLAN.caution}</p>
+                <p className="text-[11px] text-rust/70 mt-2">{RUN_PLAN.caution}</p>
                 <p className="text-[11px] text-basalt/50 mt-1">{RUN_PLAN.extensions}</p>
               </div>
             </section>

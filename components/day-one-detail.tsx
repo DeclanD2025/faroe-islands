@@ -120,11 +120,11 @@ const TIMELINE_STEPS: TimelineStep[] = [
 ];
 
 const SUMMARY_ITEMS: SummaryItem[] = [
-  { icon: "⌂", label: "Leave home", time: "08:30", note: "Bellshill" },
-  { icon: "🚂", label: "Train", time: "08:59", note: "→ Haymarket" },
-  { icon: "✈", label: "Flight", time: "EDI 17:10", note: "RC 415" },
-  { icon: "⏻", label: "Ferry", time: "21:15", note: "M/F Smyril" },
-  { icon: "⌂", label: "Arrive", time: "~23:30", note: "Øravík" },
+  { icon: "H", label: "Leave home", time: "08:30", note: "Bellshill" },
+  { icon: "T", label: "Train", time: "08:59", note: "→ Haymarket" },
+  { icon: "F", label: "Flight", time: "EDI 17:10", note: "RC 415" },
+  { icon: "S", label: "Ferry", time: "21:15", note: "M/F Smyril" },
+  { icon: "A", label: "Arrive", time: "~23:30", note: "Øravík" },
 ];
 
 // =============================================================================

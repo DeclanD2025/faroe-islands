@@ -87,7 +87,7 @@ export function DecisionTreeView({ tree, onSelectPlan, activePlanId }: DecisionT
           </p>
         </div>
         <span className="text-[14px] text-basalt/40 shrink-0 ml-3">
-          {expanded ? "▲" : "▼"}
+          {expanded ? "^" : "v"}
         </span>
       </button>
       {expanded && (

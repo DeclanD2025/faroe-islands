@@ -150,11 +150,11 @@ const DAY_FIVE_TIMELINE: TimelineStep[] = [
 ];
 
 const DAY_FIVE_SUMMARY: SummaryItem[] = [
-  { icon: "⌂", label: "Checkout", time: "12:00", note: "Øravík" },
-  { icon: "⏻", label: "Ferry", time: "11:30", note: "Krambatangi" },
-  { icon: "⏻", label: "Bus 300", time: "14:00", note: "→ Sørvágur" },
+  { icon: "Ck", label: "Checkout", time: "12:00", note: "Øravík" },
+  { icon: "Sf", label: "Ferry", time: "11:30", note: "Krambatangi" },
+  { icon: "Bs", label: "Bus 300", time: "14:00", note: "→ Sørvágur" },
   { icon: "⌂", label: "Check-in", time: "~14:45", note: "Hugo" },
-  { icon: "🌄", label: "Explore", time: "4–5 hrs", note: "Vágar" },
+  { icon: "Ex", label: "Explore", time: "4–5 hrs", note: "Vágar" },
 ];
 
 // =============================================================================
@@ -207,9 +207,9 @@ function FerryComparisonTable() {
             </div>
             <p className="code tnum text-[16px] font-medium text-basalt mb-2">{opt.arrival} arrival</p>
             <div className="space-y-1 text-[11px] text-basalt/55">
-              <p>🛏 Sleep: {opt.sleepAfterMatchday}</p>
-              <p>⏱ Vágar time: {opt.usableVagarTime}</p>
-              <p>🔄 Resilience: <span className={
+              <p>Sleep: {opt.sleepAfterMatchday}</p>
+              <p>Vágar time: {opt.usableVagarTime}</p>
+              <p>Resilience: <span className={
                 opt.disruptionResilience === "high" ? "text-moss" : "text-yellow"
               }>{opt.disruptionResilience}</span></p>
             </div>
@@ -374,7 +374,7 @@ export function DayFiveDetail() {
                         mod.feasible === "if-taxi" ? "text-yellow" :
                         "text-rust"
                       }`}>
-                        {mod.feasible === "yes" ? "Public transport ✓" :
+                        {mod.feasible === "yes" ? "Public transport · yes" :
                          mod.feasible === "if-taxi" ? "Taxi only ◇" :
                          "Not walkable ✗"}
                       </span>

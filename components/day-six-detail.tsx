@@ -153,11 +153,11 @@ const TIMELINE_STEPS: TimelineStep[] = [
 ];
 
 const SUMMARY_ITEMS: SummaryItem[] = [
-  { icon: "⏻", label: "Bus to FAE", time: "07:40", note: "Hugo" },
-  { icon: "✈", label: "Flight 1", time: "RC 416", note: "FAE → LGW" },
-  { icon: "⏻", label: "Coach", time: "13:00", note: "LGW → STN" },
-  { icon: "✈", label: "Flight 2", time: "RK 330", note: "STN → GLA" },
-  { icon: "⌂", label: "Home", time: "~22:00", note: "Bellshill" },
+  { icon: "Bs", label: "Bus to FAE", time: "07:40", note: "Hugo" },
+  { icon: "F1", label: "Flight 1", time: "RC 416", note: "FAE → LGW" },
+  { icon: "Ch", label: "Coach", time: "13:00", note: "LGW → STN" },
+  { icon: "F2", label: "Flight 2", time: "RK 330", note: "STN → GLA" },
+  { icon: "Hm", label: "Home", time: "~22:00", note: "Bellshill" },
 ];
 
 // =============================================================================
@@ -269,7 +269,7 @@ export function DaySixDetail() {
             <section className="mb-6">
               <div className="border border-rust/20 bg-rust/[0.02] rounded-[7px] p-4">
                 <p className="text-[10px] uppercase tracking-[0.12em] text-rust font-medium mb-2">
-                  ⚠ Self-transfer — RC 416 and RK 330 are separate bookings
+                  Self-transfer — RC 416 and RK 330 are separate bookings
                 </p>
                 <div className="space-y-2 text-[12px]">
                   <p className="text-basalt/70">
@@ -359,7 +359,7 @@ export function DaySixDetail() {
         <section className="mb-6"><p className="text-[10px] uppercase tracking-[0.16em] text-fjord/60 mb-2">Homeward timeline</p><MobileTimeline steps={TIMELINE_STEPS} /></section>
         <section className="mb-6">
           <div className="border border-rust/20 bg-rust/[0.02] rounded-[8px] p-4">
-            <p className="text-[11px] uppercase tracking-[0.12em] text-rust font-medium mb-1">⚠ Self-transfer — not protected</p>
+            <p className="text-[11px] uppercase tracking-[0.12em] text-rust font-medium mb-1">Self-transfer — not protected</p>
             <p className="text-[12px] text-basalt/70">If RC 416 is delayed, the RK 330 booking is not protected. Travel insurance with missed-connection cover is essential.</p>
           </div>
         </section>

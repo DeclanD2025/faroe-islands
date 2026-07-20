@@ -243,13 +243,13 @@ export const FERRY = {
   crossingMinutes: 125,
   matchNorthbound: [
     { dep: "Krambatangi 06:00", arr: "Tórshavn 08:05" },
-    { dep: "Krambatangi 11:30", arr: "Tórshavn 13:35", highlight: true, note: "✓ match out" },
+    { dep: "Krambatangi 11:30", arr: "Tórshavn 13:35", highlight: true, note: "match out" },
     { dep: "Krambatangi 17:30", arr: "Tórshavn 19:35", note: "too late for KO" },
   ],
   matchSouthbound: [
     { dep: "Tórshavn 08:45", arr: "Krambatangi 10:50" },
     { dep: "Tórshavn 14:15", arr: "Krambatangi 16:20" },
-    { dep: "Tórshavn 21:15", arr: "Krambatangi 23:20", highlight: true, note: "✓ last boat" },
+    { dep: "Tórshavn 21:15", arr: "Krambatangi 23:20", highlight: true, note: "last boat" },
   ],
   booking: "booking.ssl.fo · foot passengers queue 1 h, gate closes 5 min before sailing",
 } as const;
@@ -309,7 +309,7 @@ export const CHECKLIST: ChecklistItem[] = [
   { id: "travel-card",      group: "Book",    what: "7-day SSL Travel Card × 2 (DKK 700 ≈ £80 pp) · pickup Tórshavn terminal", why: "Covers all buses + foot-ferry crossings." },
   { id: "edinburgh-fare",   group: "Book",    what: "Taxi/transfer EDI home → airport or overnight parking",  why: "Both directions need confirming, especially the early return." },
   { id: "weather-pack",     group: "Confirm", what: "weather forecast · checked Sunday before departure",     why: "yr.no is more reliable than Apple Weather in the Faroes." },
-  { id: "motherwell-tickets", group: "Confirm", what: "Match tickets · save offline PDF + a paper copy",      why: "Motherwell allocation not yet announced — keep an eye on the club." },
+  { id: "motherwell-tickets", group: "Confirm", what: "Match tickets · save offline PDF + a paper copy",      why: "Match ticket bought — keep an eye on the club." },
   { id: "offline-maps",     group: "Download", what: "Google Maps / Maps.me · Faroese tiles for offline",       why: "Country-wide, including Suðuroy and Tórshavn street-level." },
   { id: "itinerary-pdf",    group: "Download", what: "A printable copy of this site saved offline",             why: "If signal fails, the page should still answer the practical questions." },
   { id: "apps-eu-plug",     group: "Pack",    what: "EU travel adapter · Type C/F · 230V",                       why: "Two-pin only · don‘t leave home without it." },

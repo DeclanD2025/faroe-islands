@@ -34,7 +34,7 @@ export const SCOTRAIL_DEPARTURES = [
   { dep: "08:59", arr: "10:02", notes: "" },
   { dep: "09:59", arr: "11:02", notes: "" },
   { dep: "10:59", arr: "12:02", notes: "" },
-  { dep: "11:59", arr: "13:02", notes: "✓ safest — EDI by ~13:30" },
+  { dep: "11:59", arr: "13:02", notes: "* safest — EDI by ~13:30" },
   { dep: "12:59", arr: "14:02", notes: "also fine — EDI by ~14:30" },
   { dep: "13:59", arr: "15:02", notes: "latest comfortable — EDI ~15:30" },
 ] as const;

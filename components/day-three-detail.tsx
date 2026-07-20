@@ -125,7 +125,7 @@ const MATCHDAY_PREP = [
   { item: "Ferry snacks", detail: "Sandwiches, fruit, water for the 2h crossing each way." },
   { item: "Phone charging", detail: "Charge phone + portable charger overnight. No car charging on matchday." },
   { item: "Layers", detail: "Pack waterproof jacket, fleece, scarf. Stadium is exposed, evening cools fast." },
-  { item: "Match ticket", detail: "Save offline PDF + carry paper copy. Motherwell allocation TBC." },
+  { item: "Match ticket", detail: "Save offline PDF + carry paper copy. Match ticket bought." },
   { item: "Return transport", detail: "Save taxi numbers. Know the walk from stadium to ferry terminal (~1 km)." },
   { item: "Friday packing", detail: "Separate overnight bag for Sørvágur. Leave main bag packed for morning checkout." },
 ];
@@ -165,14 +165,14 @@ export function DayThreeDetail() {
             <section className="mb-6">
               <div className="border border-yellow/30 bg-yellow/[0.03] rounded-[7px] p-4">
                 <p className="text-[10px] uppercase tracking-[0.12em] text-yellow/80 mb-1 flex items-center gap-1.5">
-                  <span>⚠</span> Ólavsøka · 29 July
+                  <span>! </span> Ólavsøka · 29 July
                 </p>
                 <p className="text-[13px] text-basalt/75 mb-2">{OLAVSOKA_NOTICE.summary}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[12px] text-basalt/60">
-                  <p>🚌 {OLAVSOKA_NOTICE.transport}</p>
-                  <p>🛒 {OLAVSOKA_NOTICE.shops}</p>
-                  <p>☕ {OLAVSOKA_NOTICE.businesses}</p>
-                  <p>🎉 {OLAVSOKA_NOTICE.localEvents}</p>
+                  <p>{OLAVSOKA_NOTICE.transport}</p>
+                  <p>{OLAVSOKA_NOTICE.shops}</p>
+                  <p>{OLAVSOKA_NOTICE.businesses}</p>
+                  <p>{OLAVSOKA_NOTICE.localEvents}</p>
                 </div>
                 <p className="text-[12px] font-medium text-basalt/70 mt-2">{OLAVSOKA_NOTICE.action}</p>
               </div>
@@ -241,7 +241,7 @@ export function DayThreeDetail() {
               <div className="border border-basalt/15 rounded-[7px] divide-y divide-basalt/8">
                 {MATCHDAY_PREP.map((item, i) => (
                   <div key={i} className="flex items-start gap-2.5 px-3 py-2.5 text-[13px]">
-                    <span className="text-rust shrink-0 mt-0.5">□</span>
+                    <span className="text-rust shrink-0 mt-0.5">[ ]</span>
                     <div>
                       <span className="text-basalt font-medium">{item.item}</span>
                       <span className="text-basalt/50"> — {item.detail}</span>

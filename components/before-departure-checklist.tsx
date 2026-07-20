@@ -19,7 +19,7 @@ const CHECKLIST_ITEMS = [
   { id: "bd-portable-charger", group: "Pack", what: "Portable charger + EU Type C/F adapter", why: "Long days out, no car to charge from. Two-pin only in Faroes.", deadline: "Before departure", relatedDay: "all" },
   { id: "bd-offline-maps", group: "Download", what: "Offline Google Maps: Suðuroy + Tórshavn + Vágar", why: "Country-wide coverage. Includes street-level for Tórshavn.", deadline: "Before departure", relatedDay: "all" },
   { id: "bd-flight-checkin", group: "Book", what: "Online check-in: RC 415 (Atlantic Airways) + RK 330 (Ryanair)", why: "Atlantic Airways allows online check-in. Ryanair requires it or pays fee.", deadline: "Day 1 / Day 6", relatedDay: "1,6" },
-  { id: "bd-match-ticket", group: "Confirm", what: "Match ticket saved offline + paper copy", why: "Motherwell allocation not yet announced. Keep checking club site.", deadline: "Day 4", relatedDay: "4" },
+  { id: "bd-match-ticket", group: "Confirm", what: "Match ticket bought - save offline PDF", why: "Ticket purchased. Save offline PDF and paper copy.", deadline: "Day 4", relatedDay: "4" },
   { id: "bd-accommodation-confirm", group: "Confirm", what: "Both accommodation confirmations saved offline", why: "Øravík Airbnb + Guesthouse Hugo. PIN codes on paper, not phone-only.", deadline: "Before departure", relatedDay: "1,5" },
   { id: "bd-emergency-contacts", group: "Save", what: "Emergency numbers saved: 112, taxi +298 239550, Hugo +298 232101", why: "Save in phone AND on paper. Suðuroy hospital in Tvøroyri.", deadline: "Before departure", relatedDay: "all" },
   { id: "bd-taxi-contacts", group: "Save", what: "Taxi numbers saved: Suðuroy +298 239550, Tórshavn +298 313131", why: "Late-night Krambatangi arrivals. Ferry disruption fallback.", deadline: "Before departure", relatedDay: "1,4" },
@@ -96,7 +96,7 @@ export function BeforeDepartureChecklist() {
                     : "border-basalt/25 text-transparent group-hover:border-basalt/40"
                 }`}
               >
-                {checked ? "✓" : ""}
+                {checked ? "x" : ""}
               </span>
               <div className="min-w-0">
                 <p className={`text-[13px] ${checked ? "text-basalt/50 line-through" : "text-basalt"}`}>

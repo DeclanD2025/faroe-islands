@@ -370,12 +370,12 @@ export const LOCAL_PLACES: LocalPlace[] = [
 export type FieldGuideTab = { id: LocalPlaceTab; label: string; icon: string };
 
 export const FIELD_GUIDE_TABS: FieldGuideTab[] = [
-  { id: "food", label: "Food", icon: "🍽" },
-  { id: "drink", label: "Drink", icon: "🍺" },
-  { id: "shops", label: "Shops", icon: "🛒" },
+  { id: "food", label: "Food", icon: "Fd" },
+  { id: "drink", label: "Drink", icon: "Dr" },
+  { id: "shops", label: "Shops", icon: "Sh" },
   { id: "sights", label: "Sights", icon: "🏛" },
   { id: "practical", label: "Practical", icon: "ℹ" },
-  { id: "hikes", label: "Hikes", icon: "▲" },
+  { id: "hikes", label: "Hikes", icon: "Hk" },
 ];
 
 export function getTabCategory(tab: LocalPlaceTab): LocalPlaceCategory[] {

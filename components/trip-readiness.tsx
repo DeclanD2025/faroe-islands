@@ -70,7 +70,7 @@ export function TripReadiness() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[12px]">
           <ReadinessItem label="Ferry bookings" value="4 of 4" ok />
           <ReadinessItem label="Checklist" value="12 of 18" />
-          <ReadinessItem label="Match ticket" value="Pending" emphasis />
+          <ReadinessItem label="Match ticket" value="Bought" emphasis />
           <ReadinessItem label="Offline maps" value="Ready" ok />
         </div>
       )}

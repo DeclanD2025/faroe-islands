@@ -41,11 +41,11 @@ const FaroesMap = dynamic(() => import("@/components/map/faroes-map"), {
 // =============================================================================
 
 const PRE_DEPARTURE_ITEMS = [
-  { icon: "⏰", text: "Wake 08:00–09:00 · breakfast at Við á 7" },
-  { icon: "🌤", text: "Check yr.no for Tórshavn · wind, rain, temperature at kick-off" },
-  { icon: "🎒", text: "Pack: match ticket (offline PDF + paper), waterproof layer, scarf, ID, portable charger" },
-  { icon: "🚌", text: "Bus 700 from Ferjuleðan to Krambatangi · depart by 10:45" },
-  { icon: "🍎", text: "Food for return ferry — buy at Bónus Tvøroyri on Wed or bring from base" },
+  { icon: "T", text: "Wake 08:00–09:00 · breakfast at Við á 7" },
+  { icon: "W", text: "Check yr.no for Tórshavn · wind, rain, temperature at kick-off" },
+  { icon: "Pk", text: "Pack: match ticket (offline PDF + paper), waterproof layer, scarf, ID, portable charger" },
+  { icon: "Bs", text: "Bus 700 from Ferjuleðan to Krambatangi · depart by 10:45" },
+  { icon: "Fd", text: "Food for return ferry — buy at Bónus Tvøroyri on Wed or bring from base" },
 ];
 
 // =============================================================================
@@ -110,11 +110,11 @@ const DAY_FOUR_TIMELINE: TimelineStep[] = [
 ];
 
 const DAY_FOUR_SUMMARY: SummaryItem[] = [
-  { icon: "⏻", label: "Ferry out", time: "11:30", note: "Krambatangi" },
-  { icon: "⚽", label: "Kick-off", time: "18:00", note: "Tórsvøllur" },
+  { icon: "S", label: "Ferry out", time: "11:30", note: "Krambatangi" },
+  { icon: "KO", label: "Kick-off", time: "18:00", note: "Tórsvøllur" },
   { icon: "⏻", label: "Last boat", time: "21:15", note: "CRITICAL" },
-  { icon: "⌂", label: "Arrive", time: "~23:30", note: "Øravík" },
-  { icon: "🍺", label: "Pre-match", time: "OY Brewing", note: "5 min walk" },
+  { icon: "A", label: "Arrive", time: "~23:30", note: "Øravík" },
+  { icon: "Pm", label: "Pre-match", time: "OY Brewing", note: "5 min walk" },
 ];
 
 // =============================================================================
@@ -199,7 +199,7 @@ function FerryCountdownPanel() {
       {/* Critical warning */}
       <div className="border border-rust/30 bg-rust/[0.03] rounded-[7px] p-4 mb-4">
         <p className="text-[11px] uppercase tracking-[0.12em] text-rust font-medium mb-1">
-          ⚠ Last boat: 21:15
+          Last boat: 21:15
         </p>
         <p className="text-[13px] text-basalt/80">
           Miss this and we sleep in Tórshavn. Stadium to terminal: ~1 km, 15–20 min walk.
@@ -312,14 +312,14 @@ function MobileFerryScenarios() {
       >
         <div>
           <p className="text-[11px] uppercase tracking-[0.12em] text-rust font-medium">
-            ⚠ Last boat: 21:15
+            Last boat: 21:15
           </p>
           <p className="text-[12px] text-basalt/70 mt-1">
             Miss this and we sleep in Tórshavn. Stadium to terminal: ~1 km, 15–20 min walk.
           </p>
         </div>
         <span className="text-[14px] text-basalt/40 shrink-0 ml-3">
-          {expanded ? "▲" : "▼"}
+          {expanded ? "^" : "v"}
         </span>
       </button>
       {expanded && (

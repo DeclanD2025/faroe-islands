@@ -79,7 +79,7 @@ export default function MobileBottomSheet({
             {summary}
           </span>
           <span className="text-basalt/40 text-[14px]" aria-hidden>
-            ▲
+            ^
           </span>
         </button>
       )}
